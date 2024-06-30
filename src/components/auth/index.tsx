@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Loader2 } from 'lucide-react';
-
+// UI
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -24,10 +24,10 @@ import {
   FormLabel,
   FormMessage,
 } from '../ui/form';
-
+import { Checkbox } from '../ui/checkbox';
+// Utils
 import { useLogin } from '@/apis/auth';
 import { useAuthStore } from '@/store/auth';
-import { Checkbox } from '../ui/checkbox';
 
 const loginSchema = z.object({
   email: z
