@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
-import { Undo2 } from 'lucide-react';
-import { useForm } from 'react-hook-form';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Trash2Icon, Undo2 } from 'lucide-react';
+import { useFieldArray, useForm } from 'react-hook-form';
 import ReactSelect from 'react-select';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -16,7 +16,6 @@ import {
   FormMessage,
 } from '../ui/form';
 import { Input } from '../ui/input';
-import { Textarea } from '../ui/textarea';
 import {
   Select,
   SelectContent,
@@ -28,48 +27,17 @@ import { Checkbox } from '../ui/checkbox';
 import UploadImage from './UploadImage';
 // Utils
 import { useGetCategories } from '@/apis/categories';
-import { APP_COMPANIES, DOSAGE_FORMS } from '@/constants';
 import {
   useCreateProduct,
   useUpdateProduct,
   useViewProduct,
 } from '@/apis/products';
+import { useGetCompanies } from '@/apis/companies';
+import { useGetDosageForms } from '@/apis/dosageForm';
 import { getDirtyFields } from '@/lib/utils';
 import WhiteOverlay from '@/lib/whiteOverlay';
-
-const imagesSchema = z.object({
-  url: z.string().min(1, { message: 'URL is required' }),
-  name: z.string().min(1, { message: 'Name is required' }),
-  size: z.number().min(1, { message: 'Size is required' }),
-});
-
-const productSchema = z.object({
-  name: z.string().min(1, {
-    message: 'Name is required',
-  }),
-  description: z.string().min(1, {
-    message: 'Description is required',
-  }),
-  nutritionFacts: z.string().min(1, {
-    message: 'Nutrition Facts is required',
-  }),
-  company: z.enum(APP_COMPANIES, { required_error: 'Company is required' }),
-  category: z
-    .array(z.object({ name: z.string(), _id: z.string() }))
-    .min(1, { message: 'Category is required' }),
-  itemForm: z.enum(DOSAGE_FORMS, {
-    required_error: 'Dosage Form is required',
-  }),
-  price: z.coerce
-    .number({ invalid_type_error: 'Price is required' })
-    .min(1, { message: 'Price must be greater than 0' }),
-  quantity: z.coerce
-    .number({ invalid_type_error: 'Quantity is required' })
-    .min(1, { message: 'Quantity must be greater than 0' }),
-  featured: z.boolean(),
-  freeShipping: z.boolean(),
-  images: z.array(imagesSchema).min(1, { message: 'Image is required' }),
-});
+import TiptapEditor from '@/lib/tiptap';
+import { productSchema } from './Schema';
 
 export default function ProductForm() {
   const { productId } = useParams();
@@ -78,15 +46,24 @@ export default function ProductForm() {
     defaultValues: {
       name: '',
       description: '',
-      nutritionFacts: '',
-      company: undefined,
+      nutritionFacts: {
+        servingSize: '',
+        servingPerContainer: '',
+        ingredients: [{ name: '', amountPerServing: '', dailyValue: '' }],
+        otherIngredients: [{ name: '' }],
+      },
+      company: '',
       category: [],
-      itemForm: undefined,
+      dosageForm: '',
       price: 0,
       quantity: 0,
       featured: false,
       freeShipping: false,
       images: [],
+      directionOfUse: '',
+      warnings: '',
+      storageConditions: '',
+      NFSA_REG_NO: '',
     },
     resolver: zodResolver(productSchema),
   });
@@ -94,6 +71,9 @@ export default function ProductForm() {
   const navigate = useNavigate();
 
   const categoriesQuery = useGetCategories();
+  const companiesQuery = useGetCompanies();
+  const dosageFormsQuery = useGetDosageForms();
+
   const createProduct = useCreateProduct();
   const updateProduct = useUpdateProduct();
 
@@ -101,6 +81,22 @@ export default function ProductForm() {
     id: productId ? productId : undefined,
   });
 
+  const {
+    fields: ingredientsFields,
+    append: ingredientsAppend,
+    remove: ingredientsRemove,
+  } = useFieldArray({
+    name: 'nutritionFacts.ingredients',
+    control: form.control,
+  });
+  const {
+    fields: otherIngredientsFields,
+    append: otherIngredientsAppend,
+    remove: otherIngredientsRemove,
+  } = useFieldArray({
+    name: 'nutritionFacts.otherIngredients',
+    control: form.control,
+  });
   useEffect(() => {
     if (viewProductQuery.data) {
       const {
@@ -108,26 +104,34 @@ export default function ProductForm() {
         description,
         nutritionFacts,
         company,
-        itemForm,
+        dosageForm,
         quantity,
         price,
         featured,
         freeShipping,
         images,
         category,
+        directionOfUse,
+        warnings,
+        storageConditions,
+        NFSA_REG_NO,
       } = viewProductQuery.data;
       const newValues = {
         name,
         description,
         nutritionFacts,
-        company: company,
+        company: company._id,
         category,
-        itemForm: itemForm,
+        dosageForm: dosageForm._id,
         price,
         quantity,
         featured,
         freeShipping,
         images,
+        directionOfUse,
+        warnings,
+        storageConditions,
+        NFSA_REG_NO,
       };
       form.reset(newValues);
     }
@@ -161,7 +165,7 @@ export default function ProductForm() {
       );
     }
   };
-  // console.log('form values', form.watch());
+  console.log('form values', form.watch());
 
   return (
     <section className='space-y-8 md:w-3/4 m-auto'>
@@ -178,7 +182,7 @@ export default function ProductForm() {
           className='space-y-8 relative'
         >
           {viewProductQuery.isLoading && <WhiteOverlay />}
-          <div className='grid grid-cols-2 gap-8'>
+          <div className='grid md:grid-cols-2 gap-8'>
             {/* Name */}
             <FormField
               control={form.control}
@@ -207,9 +211,9 @@ export default function ProductForm() {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {APP_COMPANIES.map((company) => (
-                        <SelectItem key={company} value={company}>
-                          {company}
+                      {companiesQuery.data?.companies.map((company) => (
+                        <SelectItem key={company._id} value={company._id}>
+                          {company.name}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -223,14 +227,10 @@ export default function ProductForm() {
               control={form.control}
               name='description'
               render={({ field }) => (
-                <FormItem>
+                <FormItem className='col-span-2'>
                   <FormLabel>description</FormLabel>
                   <FormControl>
-                    <Textarea
-                      placeholder='product description...'
-                      rows={3}
-                      {...field}
-                    />
+                    <TiptapEditor {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -238,23 +238,167 @@ export default function ProductForm() {
             />
 
             {/* Nutrition Facts */}
-            <FormField
-              control={form.control}
-              name='nutritionFacts'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>nutrition facts</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      placeholder='product nutrition Facts...'
-                      rows={3}
-                      {...field}
+            <article className='col-span-2 space-y-8'>
+              <FormLabel>nutration facts</FormLabel>
+              <div className='grid sm:grid-cols-2 xl:grid-cols-[1fr,1fr,1fr,80px] gap-8'>
+                <FormField
+                  control={form.control}
+                  name='nutritionFacts.servingSize'
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className='text-xs'>serving size</FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name='nutritionFacts.servingPerContainer'
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className='text-xs'>
+                        serving per container
+                      </FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className=''>
+                <FormLabel className='text-xs font-bold'>ingredients</FormLabel>
+                {ingredientsFields.map((field, index) => (
+                  <div
+                    key={field.id}
+                    className='grid sm:grid-cols-2 xl:grid-cols-[1fr,1fr,1fr,80px] gap-8 items-end'
+                  >
+                    <FormField
+                      control={form.control}
+                      name={`nutritionFacts.ingredients.${index}.name`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className='text-xs'>name</FormLabel>
+                          <FormControl>
+                            <Input {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
                     />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                    <FormField
+                      control={form.control}
+                      name={`nutritionFacts.ingredients.${index}.amountPerServing`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className='text-xs'>
+                            amount per serving
+                          </FormLabel>
+                          <FormControl>
+                            <Input {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name={`nutritionFacts.ingredients.${index}.dailyValue`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className='text-xs'>daily value</FormLabel>
+                          <FormControl>
+                            <Input {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    {index === 0 ? (
+                      <Button
+                        type='button'
+                        onClick={() =>
+                          ingredientsAppend(
+                            {
+                              name: '',
+                              amountPerServing: '',
+                              dailyValue: '',
+                            },
+                            { shouldFocus: true }
+                          )
+                        }
+                      >
+                        add
+                      </Button>
+                    ) : (
+                      <Button
+                        type='button'
+                        size='icon'
+                        variant='ghost'
+                        onClick={() => ingredientsRemove(index)}
+                        className='hover:bg-red-50'
+                      >
+                        <Trash2Icon color='red' strokeWidth='1.5' size={20} />
+                      </Button>
+                    )}
+                  </div>
+                ))}
+                <div className='h-10'></div>
+                <FormLabel className='text-xs font-bold'>
+                  other ingredients
+                </FormLabel>
+                {otherIngredientsFields.map((field, index) => (
+                  <div
+                    key={field.id}
+                    className='grid sm:grid-cols-2 xl:grid-cols-[1fr,1fr,1fr,80px] gap-8 items-end'
+                  >
+                    <FormField
+                      control={form.control}
+                      name={`nutritionFacts.otherIngredients.${index}.name`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className='text-xs'>name</FormLabel>
+                          <FormControl>
+                            <Input {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    {index === 0 ? (
+                      <Button
+                        type='button'
+                        onClick={() =>
+                          otherIngredientsAppend(
+                            {
+                              name: '',
+                            },
+                            { shouldFocus: true }
+                          )
+                        }
+                        className='col-start-4'
+                      >
+                        add
+                      </Button>
+                    ) : (
+                      <Button
+                        type='button'
+                        size='icon'
+                        variant='ghost'
+                        onClick={() => otherIngredientsRemove(index)}
+                        className='hover:bg-red-50 col-start-4'
+                      >
+                        <Trash2Icon color='red' strokeWidth='1.5' size={20} />
+                      </Button>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </article>
             {/* Category */}
             <FormField
               control={form.control}
@@ -265,7 +409,7 @@ export default function ProductForm() {
                   <ReactSelect
                     {...field}
                     isMulti
-                    options={categoriesQuery.data ?? []}
+                    options={categoriesQuery.data?.categories ?? []}
                     getOptionLabel={(option) => option.name}
                     getOptionValue={(option) => option._id}
                     // theme={(theme) => ({
@@ -284,7 +428,7 @@ export default function ProductForm() {
             {/* Dosage Form */}
             <FormField
               control={form.control}
-              name='itemForm'
+              name='dosageForm'
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>dosage form</FormLabel>
@@ -295,9 +439,9 @@ export default function ProductForm() {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {DOSAGE_FORMS.map((form) => (
-                        <SelectItem key={form} value={form}>
-                          {form}
+                      {dosageFormsQuery.data?.dosageForms.map((form) => (
+                        <SelectItem key={form._id} value={form._id}>
+                          {form.name}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -383,9 +527,67 @@ export default function ProductForm() {
               control={form.control}
               name='images'
               render={() => (
-                <FormItem>
+                <FormItem className='col-span-2'>
+                  <FormLabel>images</FormLabel>
                   <FormControl>
                     <UploadImage />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Direction Of Use */}
+            <FormField
+              control={form.control}
+              name='directionOfUse'
+              render={({ field }) => (
+                <FormItem className='col-span-2'>
+                  <FormLabel>direction of use</FormLabel>
+                  <FormControl>
+                    <TiptapEditor {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            {/* Warnings */}
+            <FormField
+              control={form.control}
+              name='warnings'
+              render={({ field }) => (
+                <FormItem className='col-span-2'>
+                  <FormLabel>warnings</FormLabel>
+                  <FormControl>
+                    <TiptapEditor {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            {/* Storage Conditions */}
+            <FormField
+              control={form.control}
+              name='storageConditions'
+              render={({ field }) => (
+                <FormItem className='col-span-2'>
+                  <FormLabel>storage conditions</FormLabel>
+                  <FormControl>
+                    <TiptapEditor {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            {/* NFSA_REG_NO */}
+            <FormField
+              control={form.control}
+              name='NFSA_REG_NO'
+              render={({ field }) => (
+                <FormItem className='col-span-2'>
+                  <FormLabel>NFSA_REG_NO</FormLabel>
+                  <FormControl>
+                    <TiptapEditor {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

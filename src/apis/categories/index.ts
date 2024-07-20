@@ -3,7 +3,11 @@ import { request } from '../client';
 import { TCategory } from '@/global';
 
 // ####################### Get Categories #######################
-const getCategories = async (): Promise<TCategory[]> => {
+type GetCategoriesReturnType = {
+  categories: TCategory[];
+};
+
+const getCategories = async (): Promise<GetCategoriesReturnType> => {
   const { data } = await request({
     url: `categories`,
     method: 'GET',

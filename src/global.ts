@@ -24,9 +24,18 @@ export type TProduct = {
   slug: string;
   images: { url: string; name: string; size: number }[];
   description: string;
-  nutritionFacts: string;
-  company: (typeof APP_COMPANIES)[number];
-  itemForm: (typeof DOSAGE_FORMS)[number];
+  nutritionFacts: {
+    servingSize: string;
+    servingPerContainer: string;
+    ingredients: {
+      name: string;
+      amountPerServing: string;
+      dailyValue: string;
+    }[];
+    otherIngredients: { name: string }[];
+  };
+  company: Partial<TCompany>;
+  dosageForm: Partial<TDosageForm>;
   category: Partial<TCategory>[];
   freeShipping: boolean;
   numReviews: number;
@@ -35,11 +44,33 @@ export type TProduct = {
   quantity: number;
   featured: boolean;
   sold: number;
+  directionOfUse: string;
+  warnings: string;
+  storageConditions: string;
+  NFSA_REG_NO: string;
   createdAt: string;
   updatedAt: string;
 };
 
 export type TCategory = {
+  _id: string;
+  name: string;
+  slug: string;
+  productsCount: number;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type TCompany = {
+  _id: string;
+  name: string;
+  slug: string;
+  productsCount: number;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type TDosageForm = {
   _id: string;
   name: string;
   slug: string;

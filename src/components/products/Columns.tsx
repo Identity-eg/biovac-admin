@@ -1,4 +1,5 @@
 import { ColumnDef } from '@tanstack/react-table';
+import parse from 'html-react-parser';
 // UI
 import { Badge } from '@/components/ui/badge';
 import { DataTableColumnHeader } from './table/columnHeader';
@@ -15,7 +16,7 @@ export const columns: ColumnDef<TProduct>[] = [
     cell: ({ row }) => {
       const product = row.original;
       return (
-        <div className='flex items-center'>
+        <div className='flex items-center max-w-[50ch]'>
           <div className='flex-shrink-0 w-10 h-10'>
             <img
               className='w-10 h-10 rounded-full'
@@ -28,7 +29,7 @@ export const columns: ColumnDef<TProduct>[] = [
               {product.name}
             </div>
             <div className='text-sm text-gray-500 line-clamp-1'>
-              {product.description}
+              {parse(product.description)}
             </div>
           </div>
         </div>
@@ -42,24 +43,20 @@ export const columns: ColumnDef<TProduct>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title='company' />
     ),
-    cell: ({ row }) => <Badge variant='outline'>{row.original.company}</Badge>,
-    filterFn: (row, id, value) => {
-      return value.includes(row.getValue(id));
+    cell: ({ row }) => {
+      const company = row.original.company.name;
+      return <Badge variant='outline'>{company}</Badge>;
     },
     enableSorting: false,
   },
   {
-    accessorKey: 'itemForm',
+    accessorKey: 'dosageForm',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title='dosage form' />
     ),
-    cell: ({ row }) => (
-      <Badge variant='outline' className=''>
-        {row.original.itemForm}
-      </Badge>
-    ),
-    filterFn: (row, id, value) => {
-      return value.includes(row.getValue(id));
+    cell: ({ row }) => {
+      const dosageForm = row.original.dosageForm.name;
+      return <Badge variant='outline'>{dosageForm}</Badge>;
     },
     enableSorting: false,
   },
@@ -71,10 +68,6 @@ export const columns: ColumnDef<TProduct>[] = [
     cell: ({ row }) => {
       const category = row.original.category.map((cat) => cat.name).join(' , ');
       return <div className='text-gray-800 font-semibold'>{category}</div>;
-    },
-    filterFn: (row, id, value) => {
-      const rowCategories: TProduct['category'] = row.getValue(id);
-      return rowCategories.map((cat) => cat._id).some((v) => value.includes(v));
     },
     enableSorting: false,
   },

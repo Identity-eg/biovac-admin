@@ -1,22 +1,25 @@
 import {
-  Home,
-  Layers3,
-  MessagesSquare,
-  Package,
-  ShoppingCart,
-  Users,
+  Building2Icon,
+  HomeIcon,
+  Layers3Icon,
+  PackageIcon,
+  PillIcon,
+  ShoppingCartIcon,
+  UsersIcon,
 } from 'lucide-react';
 
 export const navLinks = [
-  { id: 1, label: 'dashboard', path: '', icon: Home },
-  { id: 2, label: 'orders', path: 'orders', icon: ShoppingCart },
-  { id: 3, label: 'products', path: 'products', icon: Package },
-  { id: 4, label: 'categories', path: 'categories', icon: Layers3 },
+  { id: 1, label: 'dashboard', path: '', icon: HomeIcon },
+  { id: 2, label: 'orders', path: 'orders', icon: ShoppingCartIcon },
+  { id: 3, label: 'products', path: 'products', icon: PackageIcon },
+  { id: 4, label: 'categories', path: 'categories', icon: Layers3Icon },
+  { id: 4, label: 'companies', path: 'companies', icon: Building2Icon },
+  { id: 4, label: 'dosage forms', path: 'dosageForms', icon: PillIcon },
   {
     id: 5,
     label: 'customers',
     path: 'customers',
-    icon: Users,
+    icon: UsersIcon,
   },
   // { id: 6, label: 'messages', path: 'messages', icon: MessagesSquare },
 ];

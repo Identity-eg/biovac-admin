@@ -11,6 +11,8 @@ import { DataTableFacetedFilter } from './facetedFilter';
 import { APP_COMPANIES, DOSAGE_FORMS } from '@/constants';
 import { useGetCategories } from '@/apis/categories';
 import useDebounce from '@/hooks/useDebounceValue';
+import { useGetCompanies } from '@/apis/companies';
+import { useGetDosageForms } from '@/apis/dosageForm';
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
@@ -24,8 +26,10 @@ export function DataTableToolbar<TData>({
     searchParams.get('name') ?? '',
     500
   );
-  
+
   const categoriesQuery = useGetCategories();
+  const companiesQuery = useGetCompanies();
+  const dosageFormsQuery = useGetDosageForms();
 
   useEffect(() => {
     if (debouncedSearch) {
@@ -55,20 +59,24 @@ export function DataTableToolbar<TData>({
           <DataTableFacetedFilter
             column={table.getColumn('company')}
             title='Company'
-            options={APP_COMPANIES.map((company) => ({
-              label: company,
-              value: company,
-            }))}
+            options={
+              companiesQuery.data?.companies?.map((com) => ({
+                label: com.name,
+                value: com._id,
+              })) ?? []
+            }
           />
         )}
-        {table.getColumn('itemForm') && (
+        {table.getColumn('dosageForm') && (
           <DataTableFacetedFilter
-            column={table.getColumn('itemForm')}
+            column={table.getColumn('dosageForm')}
             title='Dosage Form'
-            options={DOSAGE_FORMS.map((company) => ({
-              label: company,
-              value: company,
-            }))}
+            options={
+              dosageFormsQuery.data?.dosageForms?.map((dos) => ({
+                label: dos.name,
+                value: dos._id,
+              })) ?? []
+            }
           />
         )}
         {table.getColumn('category') && (
@@ -76,7 +84,7 @@ export function DataTableToolbar<TData>({
             column={table.getColumn('category')}
             title='Category'
             options={
-              categoriesQuery.data?.map((cat) => ({
+              categoriesQuery.data?.categories?.map((cat) => ({
                 label: cat.name,
                 value: cat._id,
               })) ?? []

@@ -1,7 +1,6 @@
 import { Column } from '@tanstack/react-table';
-import { useSearchParams } from 'react-router-dom';
-import { Check, CirclePlus } from 'lucide-react';
-// UI
+
+import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -19,8 +18,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { Separator } from '@/components/ui/separator';
-// Utils
-import { cn } from '@/lib/utils';
+import { Check, CirclePlus } from 'lucide-react';
 
 interface DataTableFacetedFilterProps<TData, TValue> {
   column?: Column<TData, TValue>;
@@ -37,36 +35,35 @@ export function DataTableFacetedFilter<TData, TValue>({
   title,
   options,
 }: DataTableFacetedFilterProps<TData, TValue>) {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const selectedValues = searchParams.getAll(column?.id ?? '');
+  const facets = column?.getFacetedUniqueValues();
+  const selectedValues = new Set(column?.getFilterValue() as string[]);
+
   return (
     <Popover>
       <PopoverTrigger asChild>
         <Button variant='outline' size='sm' className='h-8 border-dashed'>
           <CirclePlus className='mr-2 h-4 w-4' />
           {title}
-          {selectedValues && selectedValues.length > 0 && (
+          {selectedValues?.size > 0 && (
             <>
               <Separator orientation='vertical' className='mx-2 h-4' />
               <Badge
                 variant='secondary'
                 className='rounded-sm px-1 font-normal lg:hidden'
               >
-                {selectedValues.length}
+                {selectedValues.size}
               </Badge>
               <div className='hidden space-x-1 lg:flex'>
-                {selectedValues.length > 2 ? (
+                {selectedValues.size > 2 ? (
                   <Badge
                     variant='secondary'
                     className='rounded-sm px-1 font-normal'
                   >
-                    {selectedValues.length} selected
+                    {selectedValues.size} selected
                   </Badge>
                 ) : (
                   options
-                    .filter((option) =>
-                      searchParams.has(column?.id ?? '', option.value)
-                    )
+                    .filter((option) => selectedValues.has(option.value))
                     .map((option) => (
                       <Badge
                         variant='secondary'
@@ -82,40 +79,28 @@ export function DataTableFacetedFilter<TData, TValue>({
           )}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className='w-auto max-w-[300px] p-0' align='start'>
-        <Command
-          filter={(value, search) => {
-            const name = options.find(
-              (o) => o.value.toString() === value.toString()
-            )?.label;
-            if (
-              name &&
-              name.toLocaleLowerCase().includes(search.toLocaleLowerCase())
-            )
-              return 1;
-            return 0;
-          }}
-        >
+      <PopoverContent className='w-[200px] p-0' align='start'>
+        <Command>
           <CommandInput placeholder={title} />
           <CommandList>
             <CommandEmpty>No results found.</CommandEmpty>
             <CommandGroup>
               {options.map((option) => {
-                const isSelected = searchParams.has(
-                  column?.id ?? '',
-                  option.value
-                );
+                const isSelected = selectedValues.has(option.value);
                 return (
                   <CommandItem
                     key={option.value}
                     value={option.value}
                     onSelect={() => {
                       if (isSelected) {
-                        searchParams.delete(column?.id ?? '', option.value);
+                        selectedValues.delete(option.value);
                       } else {
-                        searchParams.append(column?.id ?? '', option.value);
+                        selectedValues.add(option.value);
                       }
-                      setSearchParams(searchParams);
+                      const filterValues = Array.from(selectedValues);
+                      column?.setFilterValue(
+                        filterValues.length ? filterValues : undefined
+                      );
                     }}
                   >
                     <div
@@ -132,19 +117,21 @@ export function DataTableFacetedFilter<TData, TValue>({
                       <option.icon className='mr-2 h-4 w-4 text-muted-foreground' />
                     )}
                     <span>{option.label}</span>
+                    {facets?.get(option.value) && (
+                      <span className='ml-auto flex h-4 w-4 items-center justify-center font-mono text-xs'>
+                        {facets.get(option.value)}
+                      </span>
+                    )}
                   </CommandItem>
                 );
               })}
             </CommandGroup>
-            {selectedValues && selectedValues.length > 0 && (
+            {selectedValues.size > 0 && (
               <>
                 <CommandSeparator />
                 <CommandGroup>
                   <CommandItem
-                    onSelect={() => {
-                      searchParams.delete(column?.id ?? '');
-                      setSearchParams(searchParams);
-                    }}
+                    onSelect={() => column?.setFilterValue(undefined)}
                     className='justify-center text-center'
                   >
                     Clear filters

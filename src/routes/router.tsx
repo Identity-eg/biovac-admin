@@ -15,6 +15,10 @@ import ProductsPage from '@/components/products';
 import ProductForm from '@/components/products/Form';
 import CategoriesPage from '@/components/categories';
 import CategoryForm from '@/components/categories/Form';
+import CompaniesPage from '@/components/companies';
+import CompanyForm from '@/components/companies/Form';
+import DosageFormPage from '@/components/dosageForm';
+import DosageFormForm from '@/components/dosageForm/Form';
 import OrderDetails from '@/components/orders/Details';
 
 export const router = createBrowserRouter([
@@ -53,6 +57,27 @@ export const router = createBrowserRouter([
             element: <CategoryForm />,
           },
           { path: 'categories/edit/:categoryId', element: <CategoryForm /> },
+          {
+            path: 'companies',
+            element: <CompaniesPage />,
+          },
+          {
+            path: 'companies/create',
+            element: <CompanyForm />,
+          },
+          { path: 'companies/edit/:companyId', element: <CompanyForm /> },
+          {
+            path: 'dosageForms',
+            element: <DosageFormPage />,
+          },
+          {
+            path: 'dosageForms/create',
+            element: <DosageFormForm />,
+          },
+          {
+            path: 'dosageForms/edit/:dosageFormId',
+            element: <DosageFormForm />,
+          },
           {
             path: 'customers',
             element: <CustomersPage />,

@@ -26,7 +26,7 @@ export default function CategoriesPage() {
           </Button>
         </div>
 
-        <DataTable data={categoriesQuery.data} columns={columns} />
+        <DataTable data={categoriesQuery.data.categories} columns={columns} />
       </div>
     </>
   );
