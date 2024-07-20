@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Trash2Icon, Undo2 } from 'lucide-react';
+import { Loader2Icon, Trash2Icon, Undo2Icon } from 'lucide-react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import ReactSelect from 'react-select';
 import { z } from 'zod';
@@ -171,7 +171,7 @@ export default function ProductForm() {
     <section className='space-y-8 md:w-3/4 m-auto'>
       <div className='flex justify-between items-center'>
         <Button className='space-x-2' onClick={() => navigate(-1)}>
-          <Undo2 />
+          <Undo2Icon />
           <span className='capitalize'>back to products</span>
         </Button>
       </div>
@@ -594,8 +594,22 @@ export default function ProductForm() {
               )}
             />
           </div>
-          <Button type='submit' disabled={!form.formState.isDirty}>
-            Submit
+          <Button
+            type='submit'
+            disabled={
+              !form.formState.isDirty ||
+              updateProduct.isPending ||
+              createProduct.isPending
+            }
+          >
+            {updateProduct.isPending || createProduct.isPending ? (
+              <>
+                <Loader2Icon className='mr-2 h-4 w-4 animate-spin' />
+                Please wait
+              </>
+            ) : (
+              'Submit'
+            )}
           </Button>
         </form>
       </Form>

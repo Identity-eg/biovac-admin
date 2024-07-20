@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { Undo2 } from 'lucide-react';
+import { Undo2Icon } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -86,7 +86,7 @@ export default function CategoryForm() {
       <div className='flex justify-between items-center'>
         <Button asChild>
           <Link to='/categories' className='space-x-2'>
-            <Undo2 />
+            <Undo2Icon />
             <span className='capitalize'>back to categories</span>
           </Link>
         </Button>

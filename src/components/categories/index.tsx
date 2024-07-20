@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Plus } from 'lucide-react';
+import { PlusIcon } from 'lucide-react';
 
 import { columns } from './Columns';
 import { DataTable } from './table';
@@ -20,7 +20,7 @@ export default function CategoriesPage() {
           <h2 className='capitalize font-bold tracking-tight'>category list</h2>
           <Button asChild>
             <Link to='/categories/create' className='space-x-2'>
-              <Plus strokeWidth={3} />
+              <PlusIcon strokeWidth={3} />
               <span className='capitalize'>create category</span>
             </Link>
           </Button>

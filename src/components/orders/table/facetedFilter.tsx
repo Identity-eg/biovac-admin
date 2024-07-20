@@ -1,6 +1,6 @@
 import { Column } from '@tanstack/react-table';
 import { useSearchParams } from 'react-router-dom';
-import { Check, CirclePlus } from 'lucide-react';
+import { CheckIcon, CirclePlusIcon } from 'lucide-react';
 // UI
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -43,7 +43,7 @@ export function DataTableFacetedFilter<TData, TValue>({
     <Popover>
       <PopoverTrigger asChild>
         <Button variant='outline' size='sm' className='h-8 border-dashed'>
-          <CirclePlus className='mr-2 h-4 w-4' />
+          <CirclePlusIcon className='mr-2 h-4 w-4' />
           {title}
           {selectedValues && selectedValues.length > 0 && (
             <>
@@ -83,7 +83,19 @@ export function DataTableFacetedFilter<TData, TValue>({
         </Button>
       </PopoverTrigger>
       <PopoverContent className='w-[200px] p-0' align='start'>
-        <Command>
+        <Command
+          filter={(value, search) => {
+            const name = options.find(
+              (o) => o.value.toString() === value.toString()
+            )?.label;
+            if (
+              name &&
+              name.toLocaleLowerCase().includes(search.toLocaleLowerCase())
+            )
+              return 1;
+            return 0;
+          }}
+        >
           <CommandInput placeholder={title} />
           <CommandList>
             <CommandEmpty>No results found.</CommandEmpty>
@@ -114,7 +126,7 @@ export function DataTableFacetedFilter<TData, TValue>({
                           : 'opacity-50 [&_svg]:invisible'
                       )}
                     >
-                      <Check className={cn('h-4 w-4')} />
+                      <CheckIcon className={cn('h-4 w-4')} />
                     </div>
                     {option.icon && (
                       <option.icon className='mr-2 h-4 w-4 text-muted-foreground' />

@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Loader2 } from 'lucide-react';
+import { Loader2Icon } from 'lucide-react';
 // UI
 import { Button } from '@/components/ui/button';
 import {
@@ -151,7 +151,7 @@ export default function LoginPage() {
                 >
                   {loginMutation.isPending ? (
                     <>
-                      <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                      <Loader2Icon className='mr-2 h-4 w-4 animate-spin' />
                       Please wait
                     </>
                   ) : (
