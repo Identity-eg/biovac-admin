@@ -16,7 +16,7 @@ export default function CustomersPage() {
   const users = usersQuery.data?.pages.flatMap((page) => page.users) ?? [];
 
   return (
-    <div className='hidden h-full flex-1 flex-col space-y-8 md:flex'>
+    <div className='h-full flex-1 flex-col space-y-8 md:flex'>
       <h2 className='capitalize font-bold tracking-tight'>customer list</h2>
 
       <DataTable

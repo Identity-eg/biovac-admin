@@ -1,6 +1,7 @@
 import {
   Building2Icon,
   HomeIcon,
+  ImagesIcon,
   Layers3Icon,
   PackageIcon,
   PillIcon,
@@ -21,5 +22,5 @@ export const navLinks = [
     path: 'customers',
     icon: UsersIcon,
   },
-  // { id: 6, label: 'messages', path: 'messages', icon: MessagesSquare },
+  { id: 6, label: 'images', path: 'images', icon: ImagesIcon },
 ];

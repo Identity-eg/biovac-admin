@@ -1,6 +1,7 @@
 import { type ClassValue, clsx } from 'clsx';
 import { FieldValues } from 'react-hook-form';
 import { twMerge } from 'tailwind-merge';
+import { z } from 'zod';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -41,3 +42,22 @@ export const getDirtyFields = <T extends FieldValues>(
 
   return changedFieldValues;
 };
+
+export function unionOfLiterals<T extends string | number>(
+  constants: readonly T[]
+) {
+  const literals = constants.map((x) => z.literal(x)) as unknown as readonly [
+    z.ZodLiteral<T>,
+    z.ZodLiteral<T>,
+    ...z.ZodLiteral<T>[]
+  ];
+  return z.union(literals);
+}
+
+export function filterTruthyValues<
+  T extends Record<string, any>
+>(obj: T): Partial<T> {
+  return Object.fromEntries(
+    Object.entries(obj).filter(([, value]) => Boolean(value))
+  ) as Partial<T>;
+}

@@ -15,7 +15,7 @@ export default function CategoriesPage() {
 
   return (
     <>
-      <div className='hidden h-full flex-1 flex-col space-y-8 md:flex'>
+      <div className='h-full flex-1 flex-col space-y-8 md:flex'>
         <div className='flex justify-between items-center'>
           <h2 className='capitalize font-bold tracking-tight'>category list</h2>
           <Button asChild>

@@ -15,7 +15,7 @@ export default function DosageFormsPage() {
 
   return (
     <>
-      <div className='hidden h-full flex-1 flex-col space-y-8 md:flex'>
+      <div className='h-full flex-1 flex-col space-y-8 md:flex'>
         <div className='flex justify-between items-center'>
           <h2 className='capitalize font-bold tracking-tight'>dosage form list</h2>
           <Button asChild>

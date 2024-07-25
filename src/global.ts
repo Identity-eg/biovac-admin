@@ -1,5 +1,5 @@
 import { AxiosError } from 'axios';
-import { APP_COMPANIES, DOSAGE_FORMS, ORDER_STATUS } from './constants';
+import { IMAGES_PATHS, ORDER_STATUS } from './constants';
 
 declare module '@tanstack/react-query' {
   interface Register {
@@ -111,4 +111,22 @@ export type TOrder = {
   deliveredAt: string;
   createdAt: string;
   updatedAt: string;
+};
+
+export type TPath = (typeof IMAGES_PATHS)[keyof typeof IMAGES_PATHS];
+export type TImage = {
+  _id: string;
+  image: {
+    name: string;
+    size: number;
+    url: string;
+  }[];
+  title: string;
+  description: string;
+  path: TPath;
+  relatedProduct?: {
+    _id: string;
+    name: string;
+    description: string;
+  };
 };

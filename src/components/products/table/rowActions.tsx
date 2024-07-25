@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Row } from '@tanstack/react-table';
 import { Link } from 'react-router-dom';
-import { Ellipsis, SquarePen, Trash2 } from 'lucide-react';
+import { CopyIcon, Ellipsis, SquarePen, Trash2 } from 'lucide-react';
 // UI
 import { Button } from '@/components/ui/button';
 import {
@@ -14,6 +14,7 @@ import {
 import ProductAlert from '@/lib/alerts/ProductAlert';
 // Utils
 import { TProduct } from '@/global';
+import { toast } from '@/components/ui/use-toast';
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
@@ -25,6 +26,22 @@ export function DataTableRowActions({
   const product = row.original;
   const [isProductAlertOpened, setProductAlert] = useState(false);
 
+  function copyID() {
+    navigator.clipboard
+      .writeText(product._id)
+      .then(function () {
+        toast({ title: 'Success', description: 'ID copied to clipboard!' });
+      })
+      .catch(function () {
+        toast({
+          title: 'Failed',
+          description:
+            'there was an error while coping, please try again later',
+          variant: 'destructive',
+        });
+      });
+  }
+
   return (
     <>
       <DropdownMenu>
@@ -35,13 +52,17 @@ export function DataTableRowActions({
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align='end'>
+          <DropdownMenuItem onClick={copyID}>
+            <CopyIcon size={20} className='text-slate-500 mr-2' />
+            <span className='capitalize'>copy ID</span>
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
           <DropdownMenuItem asChild>
             <Link to={`edit/${product._id}`}>
               <SquarePen size={20} className='text-slate-500 mr-2' />
               <span className='capitalize'>edit</span>
             </Link>
           </DropdownMenuItem>
-          <DropdownMenuSeparator />
 
           <DropdownMenuItem
             className='text-destructive focus:bg-destructive/5 focus:text-destructive'

@@ -20,6 +20,8 @@ import CompanyForm from '@/components/companies/Form';
 import DosageFormPage from '@/components/dosageForm';
 import DosageFormForm from '@/components/dosageForm/Form';
 import OrderDetails from '@/components/orders/Details';
+import ImagesPage from '@/components/images';
+import ImageForm from '@/components/images/Form';
 
 export const router = createBrowserRouter([
   {
@@ -84,8 +86,16 @@ export const router = createBrowserRouter([
           },
           { path: 'customers/details/:userId', element: <CustomerDetails /> },
           {
-            path: 'analytics',
-            element: <div>analytics</div>,
+            path: 'images',
+            element: <ImagesPage />,
+          },
+          {
+            path: 'images/create',
+            element: <ImageForm />,
+          },
+          {
+            path: 'images/edit/:imageId',
+            element: <ImageForm />,
           },
         ],
       },
