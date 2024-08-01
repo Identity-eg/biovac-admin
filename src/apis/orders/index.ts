@@ -6,7 +6,7 @@ import {
   useQueryClient,
 } from '@tanstack/react-query';
 import { request } from '../client';
-import { TOrder } from '@/global';
+import { TOrder } from '@/types/order';
 
 // ####################### Get Orders #######################
 type GetOrdersReturnType = {
@@ -102,7 +102,7 @@ const updateOrder = async ({
 }) => {
   const { data } = await request({
     url: `orders/${id}`,
-    method: 'PUT',
+    method: 'PATCH',
     data: orderData,
   });
   return data;

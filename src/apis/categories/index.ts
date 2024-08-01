@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { request } from '../client';
-import { TCategory } from '@/global';
+import { TCategory } from '@/types/category';
 
 // ####################### Get Categories #######################
 type GetCategoriesReturnType = {
@@ -75,7 +75,7 @@ const updateCategory = async ({
 }) => {
   const { data } = await request({
     url: `categories/${id}`,
-    method: 'PUT',
+    method: 'PATCH',
     data: categoryData,
   });
   return data;

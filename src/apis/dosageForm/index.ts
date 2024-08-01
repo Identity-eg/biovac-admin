@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { request } from '../client';
-import { TDosageForm } from '@/global';
+import { TDosageForm } from '@/types/dosage-form';
 
 // ####################### Get DosageForms #######################
 type GetDosageFormsReturnType = {

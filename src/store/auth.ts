@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { TLoginResponse } from '@/apis/auth';
-import { TUser } from '@/global';
+import { TUser } from '@/types/user';
 
 type TAuthState = {
   accessToken: string | null;

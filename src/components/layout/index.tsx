@@ -5,6 +5,7 @@ import { useGlobalStore } from '@/store/global';
 
 export function AppLayout() {
   const openSidebar = useGlobalStore((state) => state.openSidebar);
+
   return (
     <div className=''>
       <SidebarLayout />

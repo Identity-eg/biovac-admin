@@ -11,7 +11,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
-import { TCategory } from '@/global';
+import { TCategory } from '@/types/category';
 import { toast } from '@/components/ui/use-toast';
 import CategoryAlert from '@/lib/alerts/CategoryAlert';
 import { useState } from 'react';

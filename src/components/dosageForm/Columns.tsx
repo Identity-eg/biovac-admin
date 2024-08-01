@@ -2,7 +2,7 @@ import { ColumnDef } from '@tanstack/react-table';
 
 import { DataTableColumnHeader } from './table/columnHeader';
 import { DataTableRowActions } from './table/rowActions';
-import { TDosageForm } from '@/global';
+import { TDosageForm } from '@/types/dosage-form';
 
 
 export const columns: ColumnDef<TDosageForm>[] = [

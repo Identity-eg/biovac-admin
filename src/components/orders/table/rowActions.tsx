@@ -11,7 +11,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 // Utils
-import { TOrder } from '@/global';
+import { TOrder } from '@/types/order';
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;

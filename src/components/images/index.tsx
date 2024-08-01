@@ -5,7 +5,7 @@ import { Button } from '../ui/button';
 import { Separator } from '../ui/separator';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
-import { TPath } from '@/global';
+import { TPath } from '@/types/image';
 
 export default function ImagesPage() {
   const [tabValue, setTabValue] = useState<TPath | 'footer'>('hero');

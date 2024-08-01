@@ -9,7 +9,7 @@ type TGlobalState = {
 };
 
 export const useGlobalStore = create<TGlobalState>()((set) => ({
-  openSidebar: false,
+  openSidebar: window.innerWidth > 1200 ? true : false,
   toggleSidebar: () => set((state) => ({ openSidebar: !state.openSidebar })),
 
   openSidebarMobile: false,

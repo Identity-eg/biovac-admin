@@ -11,7 +11,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
-import { TCompany } from '@/global';
+import { TCompany } from '@/types/company';
 import { toast } from '@/components/ui/use-toast';
 import CompanyAlert from '@/lib/alerts/CompanyAlert';
 import { useState } from 'react';

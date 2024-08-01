@@ -4,7 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { DataTableColumnHeader } from './table/columnHeader';
 import { DataTableRowActions } from './table/rowActions';
 // Utils
-import { TOrder } from '@/global';
+import { TOrder } from '@/types/order';
 import { formatDistanceToNow } from 'date-fns';
 
 export const columns: ColumnDef<TOrder>[] = [

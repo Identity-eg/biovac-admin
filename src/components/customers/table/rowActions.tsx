@@ -12,7 +12,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
-import { TUser } from '@/global';
+import { TUser } from '@/types/user';
 import BlockCustomerAlert from '@/lib/alerts/BlockCustomerAlert';
 
 interface DataTableRowActionsProps<TData> {

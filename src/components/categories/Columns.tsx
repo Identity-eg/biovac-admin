@@ -2,7 +2,7 @@ import { ColumnDef } from '@tanstack/react-table';
 
 import { DataTableColumnHeader } from './table/columnHeader';
 import { DataTableRowActions } from './table/rowActions';
-import { TCategory } from '@/global';
+import { TCategory } from '@/types/category';
 
 
 export const columns: ColumnDef<TCategory>[] = [

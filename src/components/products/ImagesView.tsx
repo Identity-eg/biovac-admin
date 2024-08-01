@@ -14,6 +14,8 @@ type TImage = {
 };
 
 export default function ImagesView({ images }: { images: TImage[] }) {
+  // console.log("images", images);
+
   const { setValue, getValues } = useFormContext();
 
   const handleDelete = (url: string) => {

@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { request } from '../client';
-import { TCompany } from '@/global';
+import { TCompany } from '@/types/company';
 
 // ####################### Get Companies #######################
 type GetCompaniesReturnType = {

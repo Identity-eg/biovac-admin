@@ -11,7 +11,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
-import { TDosageForm } from '@/global';
+import { TDosageForm } from '@/types/dosage-form';
 import { toast } from '@/components/ui/use-toast';
 import DosageFormAlert from '@/lib/alerts/DosageFormAlert';
 import { useState } from 'react';

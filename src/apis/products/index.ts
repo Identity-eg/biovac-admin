@@ -6,7 +6,7 @@ import {
   useQueryClient,
 } from '@tanstack/react-query';
 import { request } from '../client';
-import { TProduct } from '@/global';
+import { TProduct } from '@/types/product';
 
 // ####################### Get Products #######################
 type GetProductsReturnType = {
@@ -27,7 +27,7 @@ const getProducts = async ({
   const { data } = await request({
     url: 'products',
     method: 'GET',
-    params
+    params,
   });
   return data;
 };
@@ -103,7 +103,7 @@ const updateProduct = async ({
 }) => {
   const { data } = await request({
     url: `products/${id}`,
-    method: 'PUT',
+    method: 'PATCH',
     data: productData,
   });
   return data;

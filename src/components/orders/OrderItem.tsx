@@ -1,4 +1,4 @@
-import { TOrderItem } from '@/global';
+import { TOrderItem } from '@/types/order';
 import { Separator } from '../ui/separator';
 import { formatPrice } from '@/lib/utils';
 

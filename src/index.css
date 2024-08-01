@@ -96,7 +96,7 @@
 
 /* ############################ Start Tiptap Style  ############################ */
 .tiptap {
-  @apply border border-t-0 border-gray-200 focus:outline-none min-h-40 p-4;
+  @apply bg-gray-50 border border-t-0 border-gray-200 focus:outline-none min-h-20 p-4;
 }
 
 .tiptap ul {

@@ -1,5 +1,5 @@
 import parse from 'html-react-parser';
-import { TImage } from '@/global';
+import { TImage } from '@/types/image';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';

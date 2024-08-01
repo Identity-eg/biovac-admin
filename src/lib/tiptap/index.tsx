@@ -53,12 +53,21 @@ export default function TiptapEditor({
       onChange(currentValue);
     },
     onBlur,
+    // editorProps: {
+    //   attributes: {
+    //     class:
+    //       '',
+    //   },
+    // },
     autofocus: true,
   });
 
   useEffect(() => {
     if (value) {
-      editor?.commands.setContent(value);
+      const html = editor?.getHTML();
+      if (html !== value) {
+        editor?.commands.setContent(value);
+      }
     }
   }, [value]);
 

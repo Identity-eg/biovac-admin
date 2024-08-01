@@ -1,12 +1,12 @@
 import { ColumnDef } from '@tanstack/react-table';
-
-import { Badge } from '@/components/ui/badge';
-
-import { DataTableColumnHeader } from './table/columnHeader';
-import { DataTableRowActions } from './table/rowActions';
-import { TUser } from '@/global';
 import { BadgeCheck, Ban } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
+// UI
+import { Badge } from '@/components/ui/badge';
+import { DataTableColumnHeader } from './table/columnHeader';
+import { DataTableRowActions } from './table/rowActions';
+// Utils
+import { TUser } from '@/types/user';
 
 export const columns: ColumnDef<TUser>[] = [
   {

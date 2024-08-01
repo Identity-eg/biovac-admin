@@ -27,6 +27,17 @@ const imagesSchema = z.object({
   size: z.number().min(1, { message: 'Size is required' }),
 });
 
+const variantsSchema = z.object({
+  name: z.string().optional(),
+  unitCount: z.coerce.number().optional(),
+  flavor: z.string().optional(),
+  price: z.coerce
+    .number({ invalid_type_error: 'Price is required' })
+    .min(1, { message: 'Price must be greater than 0' }),
+  priceAfterDiscount: z.coerce.number().optional(),
+  images: z.array(imagesSchema).min(1, { message: 'Image is required' }),
+});
+
 export const productSchema = z.object({
   name: z.string().min(1, {
     message: 'Name is required',
@@ -44,15 +55,18 @@ export const productSchema = z.object({
   dosageForm: z.string().min(1, {
     message: 'Dosage Form is required',
   }),
-  price: z.coerce
-    .number({ invalid_type_error: 'Price is required' })
+  unitCount: z.coerce
+    .number()
     .min(1, { message: 'Price must be greater than 0' }),
+  price: z.coerce.number().min(1, { message: 'Price must be greater than 0' }),
+  priceAfterDiscount: z.coerce.number().optional(),
+  // .min(1, { message: 'Price must be greater than 0' }),
   quantity: z.coerce
     .number({ invalid_type_error: 'Quantity is required' })
     .min(1, { message: 'Quantity must be greater than 0' }),
   featured: z.boolean(),
-  freeShipping: z.boolean(),
   images: z.array(imagesSchema).min(1, { message: 'Image is required' }),
+  variants: z.array(variantsSchema).optional(),
   directionOfUse: z.string().min(1, {
     message: 'Direction of use is required',
   }),

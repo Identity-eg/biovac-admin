@@ -12,9 +12,9 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import ProductAlert from '@/lib/alerts/ProductAlert';
-// Utils
-import { TProduct } from '@/global';
 import { toast } from '@/components/ui/use-toast';
+// Utils
+import { TProduct } from '@/types/product';
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;

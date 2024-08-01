@@ -6,7 +6,7 @@ import {
   useQueryClient,
 } from '@tanstack/react-query';
 import { request } from '../client';
-import { TUser } from '@/global';
+import { TUser } from '@/types/user';
 
 // ####################### Get Users #######################
 type GetUsersReturnType = {
@@ -83,7 +83,7 @@ const updateUser = async ({
 }) => {
   const { data } = await request({
     url: `users/${id}`,
-    method: 'PUT',
+    method: 'PATCH',
     data: userData,
   });
   return data;
@@ -105,7 +105,7 @@ const blockUser = async ({
 }) => {
   const { data } = await request({
     url: 'users/block',
-    method: 'PUT',
+    method: 'PATCH',
     data: { id, blocked },
   });
   return data;

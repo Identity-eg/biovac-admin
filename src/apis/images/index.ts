@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { request } from '../client';
-import { TImage, TPath } from '@/global';
+import { TImage, TPath } from '@/types/image';
 
 // ####################### Get Images #######################
 type GetImagesReturnType = {

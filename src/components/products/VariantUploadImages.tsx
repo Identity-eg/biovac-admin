@@ -8,25 +8,26 @@ import ImagesView from './ImagesView';
 // Utils
 import { useUploadImage } from '@/apis/products';
 
-export default function UploadImage() {
+export default function VariantUploadImage({ index }: { index: number }) {
   const { setValue, getValues } = useFormContext();
   const uploadImage = useUploadImage();
 
   const onDrop = useCallback((droppedFiles: File[]) => {
-    // console.log("droppedFiles", droppedFiles);
+    // console.log('droppedFiles', droppedFiles);
     const imageFiles = droppedFiles;
     const formData = new FormData();
     imageFiles.forEach((file) => {
       formData.append('image', file);
     });
+
     uploadImage.mutate(
       { formData },
       {
         onSuccess: ({ images }) => {
           setValue(
-            'images',
+            `variants.${index}.images`,
             [
-              ...getValues('images'),
+              ...getValues(`variants.${index}.images`),
               ...imageFiles.map((file, idx) => ({
                 name: file.name,
                 size: file.size,
@@ -58,28 +59,21 @@ export default function UploadImage() {
         <Input type='file' {...getInputProps({ name: 'base64' })} />
         <div
           className={
-            'flex flex-col items-center justify-center w-full h-20 border cursor-pointer hover:bg-gray-50' +
+            'flex flex-col items-center justify-center w-full cursor-pointer' +
             (isDragActive ? ' ' : ' ')
           }
         >
           {uploadImage.isPending ? (
-            <>
-              <Loader color='gray ' size={30} className='animate-spin' />
-              <p className='text-gray-400'>Please wait while uploading...</p>
-            </>
+            <Loader size={30} className='animate-spin' />
           ) : (
-            <>
-              <UploadCloud size={40} color='gray' />
-              <p className='text-gray-600'>
-                Drop image here or click to upload.
-              </p>
-            </>
+            <UploadCloud
+              size={25}
+              className='text-gray-400 hover:text-gray-600'
+            />
           )}
         </div>
       </div>
-      <article className='grid grid-cols-2 gap-4'>
-        <ImagesView images={getValues('images')} />
-      </article>
+      {/* <ImagesView images={[...getValues('images')]} /> */}
     </>
   );
 }
