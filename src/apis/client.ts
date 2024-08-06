@@ -28,5 +28,6 @@ createAuthRefreshInterceptor(client, refreshAuth, {
 export const request = ({ ...options }) => {
   const accessToken = useAuthStore.getState().accessToken;
   client.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
+  client.defaults.headers.common['api-key'] = import.meta.env.VITE_API_KEY;
   return client(options);
 };
