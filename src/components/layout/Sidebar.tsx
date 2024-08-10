@@ -4,6 +4,7 @@ import { LayoutDashboard, X } from 'lucide-react';
 import { navLinks } from '@/constants/navLinks';
 import { useGlobalStore } from '@/store/global';
 import { cn } from '@/lib/utils';
+import { useAuthStore } from '@/store/auth';
 
 export default function Sidebar() {
   const { pathname } = useLocation();
@@ -12,6 +13,8 @@ export default function Sidebar() {
   const toggleSidebarMobile = useGlobalStore(
     (state) => state.toggleSidebarMobile
   );
+
+  const user = useAuthStore((state) => state.userData);
 
   return (
     <aside
@@ -28,7 +31,7 @@ export default function Sidebar() {
               <LayoutDashboard color='white' fontSize={30} />
             </span>
             <span className='relative flex px-2.5 h-16 items-center whitespace-nowrap text-3xl font-bold capitalize'>
-            biovac
+              biovac
             </span>
           </Link>
           <div
@@ -38,32 +41,34 @@ export default function Sidebar() {
             <X fontSize={30} />
           </div>
         </li>
-        {navLinks.map((li, i) => (
-          <li
-            key={i}
-            className={cn(
-              'group relative w-full hover:bg-gray-50 rounded-tl-3xl rounded-bl-3xl text-white link',
-              pathname.split('/')[1] === li.path && 'selected bg-gray-50'
-            )}
-            onClick={toggleSidebarMobile} // need to set a condition doing that only in mobilescreen
-          >
-            <NavLink
-              to={li.path}
-              className={({ isActive }) =>
-                `relative flex w-full group-hover:text-primary ${
-                  isActive && 'text-primary'
-                }`
-              }
+        {navLinks
+          .filter((li) => (user?.role ? li.roles.includes(user?.role) : false))
+          .map((li, i) => (
+            <li
+              key={i}
+              className={cn(
+                'group relative w-full hover:bg-gray-50 rounded-tl-3xl rounded-bl-3xl text-white link',
+                pathname.split('/')[1] === li.path && 'selected bg-gray-50'
+              )}
+              onClick={toggleSidebarMobile} // need to set a condition doing that only in mobilescreen
             >
-              <span className='relative flex items-center justify-center h-14 min-w-[64px]'>
-                <li.icon fontSize={30} />
-              </span>
-              <span className='relative flex px-2.5 h-14 items-center whitespace-nowrap text-lg capitalize'>
-                {li.label}
-              </span>
-            </NavLink>
-          </li>
-        ))}
+              <NavLink
+                to={li.path}
+                className={({ isActive }) =>
+                  `relative flex w-full group-hover:text-primary ${
+                    isActive && 'text-primary'
+                  }`
+                }
+              >
+                <span className='relative flex items-center justify-center h-14 min-w-[64px]'>
+                  <li.icon fontSize={30} />
+                </span>
+                <span className='relative flex px-2.5 h-14 items-center whitespace-nowrap text-lg capitalize'>
+                  {li.label}
+                </span>
+              </NavLink>
+            </li>
+          ))}
       </ul>
     </aside>
   );

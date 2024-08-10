@@ -30,11 +30,7 @@ export function useLogin() {
 export const refreshAccessTokenFn = async () => {
   const { data } = await request({ url: 'auth/refresh', method: 'GET' });
   if (data) {
-    const user = jwtDecode<TUser>(data.accessToken);
-    useAuthStore.getState().authenticateUser({
-      accessToken: data.accessToken,
-      user,
-    });
+    useAuthStore.getState().authenticateUser(data);
   }
   return data;
 };
@@ -46,7 +42,7 @@ const logout = async () => {
 };
 
 export function useLogout() {
-  const logOutUser = useAuthStore(state => state.logUserOut)
+  const logOutUser = useAuthStore((state) => state.logUserOut);
   return useMutation({
     mutationFn: logout,
     onSuccess: logOutUser,

@@ -12,6 +12,8 @@ import { useGetCategories } from '@/apis/categories';
 import useDebounce from '@/hooks/useDebounceValue';
 import { useGetCompanies } from '@/apis/companies';
 import { useGetDosageForms } from '@/apis/dosageForm';
+import { useAuthStore } from '@/store/auth';
+import { USER_ROLES } from '@/constants';
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
@@ -20,6 +22,9 @@ interface DataTableToolbarProps<TData> {
 export function DataTableToolbar<TData>({
   table,
 }: DataTableToolbarProps<TData>) {
+  const superAdmin =
+    useAuthStore((state) => state.userData?.role) === USER_ROLES.superAdmin;
+
   const [searchParams, setSearchParams] = useSearchParams();
   const [debouncedSearch, searchValue, setSearchValue] = useDebounce<string>(
     searchParams.get('name') ?? '',
@@ -54,7 +59,7 @@ export function DataTableToolbar<TData>({
           onChange={(event) => setSearchValue(event.target.value)}
           className='h-8 w-[150px] lg:w-[250px]'
         />
-        {table.getColumn('company') && (
+        {table.getColumn('company') && superAdmin && (
           <DataTableFacetedFilter
             column={table.getColumn('company')}
             title='Company'

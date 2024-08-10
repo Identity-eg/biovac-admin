@@ -56,9 +56,12 @@ import { getDirtyFields } from '@/lib/utils';
 import WhiteOverlay from '@/lib/whiteOverlay';
 import TiptapEditor from '@/lib/tiptap';
 import { productSchema } from './Schema';
+import { useAuthStore } from '@/store/auth';
+import { USER_ROLES } from '@/constants';
 
 export default function ProductForm() {
   const { productId } = useParams();
+  const user = useAuthStore((state) => state.userData);
 
   const form = useForm<z.infer<typeof productSchema>>({
     defaultValues: {
@@ -70,12 +73,13 @@ export default function ProductForm() {
         ingredients: [],
         otherIngredients: [],
       },
-      company: '',
+      company: user?.company ? user.company._id : '',
       category: [],
       dosageForm: '',
       price: 0,
       priceAfterDiscount: undefined,
       quantity: 0,
+      unitCount: 0,
       featured: false,
       images: [],
       variants: [],
@@ -196,7 +200,7 @@ export default function ProductForm() {
     }
   };
   // console.log('form values', form.watch());
-  // console.log('form errors', form.formState.errors);
+  console.log('form errors', form.formState.errors);
 
   return (
     <section className='space-y-8 md:w-3/4 3xl:w-3/5 m-auto'>
@@ -229,26 +233,54 @@ export default function ProductForm() {
               )}
             />
             {/* Company */}
+            {user?.role === USER_ROLES.superAdmin && (
+              <FormField
+                control={form.control}
+                name='company'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>company</FormLabel>
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder='Select a company' />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {companiesQuery.data?.companies.map((company) => (
+                          <SelectItem key={company._id} value={company._id}>
+                            {company.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
+            {/* Category */}
             <FormField
               control={form.control}
-              name='company'
+              name='category'
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>company</FormLabel>
-                  <Select onValueChange={field.onChange} value={field.value}>
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder='Select a company' />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {companiesQuery.data?.companies.map((company) => (
-                        <SelectItem key={company._id} value={company._id}>
-                          {company.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <FormLabel className='text-xs'>category</FormLabel>
+                  <ReactSelect
+                    {...field}
+                    isMulti
+                    options={categoriesQuery.data?.categories ?? []}
+                    getOptionLabel={(option) => option.name}
+                    getOptionValue={(option) => option._id}
+                    // theme={(theme) => ({
+                    //   ...theme,
+                    //   colors: {
+                    //     ...theme.colors,
+                    //     primary25: 'grey',
+                    //     primary: 'black',
+                    //   },
+                    // })}
+                  />
                   <FormMessage />
                 </FormItem>
               )}
@@ -472,32 +504,6 @@ export default function ProductForm() {
           </Card>
 
           <Card className='p-6 grid lg:grid-cols-2 gap-x-4 gap-y-6'>
-            {/* Category */}
-            <FormField
-              control={form.control}
-              name='category'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className='text-xs'>category</FormLabel>
-                  <ReactSelect
-                    {...field}
-                    isMulti
-                    options={categoriesQuery.data?.categories ?? []}
-                    getOptionLabel={(option) => option.name}
-                    getOptionValue={(option) => option._id}
-                    // theme={(theme) => ({
-                    //   ...theme,
-                    //   colors: {
-                    //     ...theme.colors,
-                    //     primary25: 'grey',
-                    //     primary: 'black',
-                    //   },
-                    // })}
-                  />
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
             {/* Dosage Form */}
             <FormField
               control={form.control}

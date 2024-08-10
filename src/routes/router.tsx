@@ -22,6 +22,7 @@ import DosageFormForm from '@/components/dosageForm/Form';
 import OrderDetails from '@/components/orders/Details';
 import ImagesPage from '@/components/images';
 import ImageForm from '@/components/images/Form';
+import SuperAdminRoute from './SuperAdminRoute';
 
 export const router = createBrowserRouter([
   {
@@ -52,50 +53,101 @@ export const router = createBrowserRouter([
           { path: 'products/edit/:productId', element: <ProductForm /> },
           {
             path: 'categories',
-            element: <CategoriesPage />,
+            element: (
+              <SuperAdminRoute>
+                <CategoriesPage />
+              </SuperAdminRoute>
+            ),
           },
           {
             path: 'categories/create',
-            element: <CategoryForm />,
+            element: (
+              <SuperAdminRoute>
+                <CategoryForm />
+              </SuperAdminRoute>
+            ),
           },
           { path: 'categories/edit/:categoryId', element: <CategoryForm /> },
           {
             path: 'companies',
-            element: <CompaniesPage />,
+            element: (
+              <SuperAdminRoute>
+                <CompaniesPage />
+              </SuperAdminRoute>
+            ),
           },
           {
             path: 'companies/create',
-            element: <CompanyForm />,
+            element: (
+              <SuperAdminRoute>
+                <CompanyForm />
+              </SuperAdminRoute>
+            ),
           },
           { path: 'companies/edit/:companyId', element: <CompanyForm /> },
           {
             path: 'dosageForms',
-            element: <DosageFormPage />,
+            element: (
+              <SuperAdminRoute>
+                <DosageFormPage />
+              </SuperAdminRoute>
+            ),
           },
           {
             path: 'dosageForms/create',
-            element: <DosageFormForm />,
+            element: (
+              <SuperAdminRoute>
+                <DosageFormForm />
+              </SuperAdminRoute>
+            ),
           },
           {
             path: 'dosageForms/edit/:dosageFormId',
-            element: <DosageFormForm />,
+            element: (
+              <SuperAdminRoute>
+                <DosageFormForm />
+              </SuperAdminRoute>
+            ),
           },
           {
             path: 'customers',
-            element: <CustomersPage />,
+            element: (
+              <SuperAdminRoute>
+                <CustomersPage />
+              </SuperAdminRoute>
+            ),
           },
-          { path: 'customers/details/:userId', element: <CustomerDetails /> },
+          {
+            path: 'customers/details/:userId',
+            element: (
+              <SuperAdminRoute>
+                <CustomerDetails />
+              </SuperAdminRoute>
+            ),
+          },
           {
             path: 'images',
-            element: <ImagesPage />,
+            element: (
+              <SuperAdminRoute>
+                <ImagesPage />
+              </SuperAdminRoute>
+            ),
           },
           {
             path: 'images/create',
-            element: <ImageForm />,
+            element: (
+              <SuperAdminRoute>
+                <ImageForm />
+              </SuperAdminRoute>
+            ),
           },
           {
             path: 'images/edit/:imageId',
-            element: <ImageForm />,
+            element: (
+              <SuperAdminRoute>
+                <ImageForm />
+              </SuperAdminRoute>
+            ),
           },
         ],
       },

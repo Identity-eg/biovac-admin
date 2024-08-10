@@ -11,6 +11,8 @@ import {
 } from '../ui/dropdown-menu';
 import { Button } from '../ui/button';
 import { useLogout } from '@/apis/auth';
+import { useAuthStore } from '@/store/auth';
+import { USER_ROLES } from '@/constants';
 // import LogoIcon from '@/assets/svgs/LogoIcon';
 
 export default function Header() {
@@ -21,6 +23,8 @@ export default function Header() {
     (state) => state.toggleSidebarMobile
   );
 
+  const user = useAuthStore((state) => state.userData);
+
   const handlefixedNav = () =>
     window.scrollY === 0 ? setFixedNav(false) : setFixedNav(true);
 
@@ -30,7 +34,7 @@ export default function Header() {
   }, []);
 
   const logoutMutation = useLogout();
-  
+
   return (
     <nav
       className={`sticky top-0 left-0 right-0 z-50 h-20 flex items-center justify-between px-8 py-3 transition-shadow duration-200 backdrop-filter backdrop-blur border-b ${
@@ -53,7 +57,9 @@ export default function Header() {
       {/* <LogoIcon className='w-60 lg:w-72 text-primary mr-auto' /> */}
       <div className='flex gap-x-4'>
         <LayoutDashboard fontSize={30} />
-        <span className='capitalize'>logo</span>
+        <span className='capitalize'>
+          {user?.role === USER_ROLES.admin ? user.company?.name : 'super admin'}
+        </span>
       </div>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
