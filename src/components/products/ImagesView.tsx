@@ -1,27 +1,29 @@
 import { Link } from 'react-router-dom';
-import { useFormContext } from 'react-hook-form';
+import { UseFormGetValues, UseFormSetValue } from 'react-hook-form';
+import { z } from 'zod';
 import { Eye, Trash2 } from 'lucide-react';
 // UI
 import { Card, CardDescription, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
 // Utils
 import { formatBytes } from '@/lib/utils';
+import { variantsSchema } from './Schema';
+import { TProductVariant } from '@/types/product';
 
-type TImage = {
-  name: string;
-  size: number;
-  url: string;
-};
-
-export default function ImagesView({ images }: { images: TImage[] }) {
+export default function ImagesView({
+  images,
+  setValue,
+  getValues,
+}: {
+  images: TProductVariant['images'];
+  getValues: UseFormGetValues<z.infer<typeof variantsSchema>>;
+  setValue: UseFormSetValue<z.infer<typeof variantsSchema>>;
+}) {
   // console.log("images", images);
-
-  const { setValue, getValues } = useFormContext();
-
   const handleDelete = (url: string) => {
     setValue(
       'images',
-      [...getValues('images').filter((img: TImage) => img.url !== url)],
+      [...getValues('images').filter((img) => img.url !== url)],
       { shouldDirty: true }
     );
   };

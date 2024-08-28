@@ -4,21 +4,21 @@ import { TDosageForm } from './dosage-form';
 
 type TProductImage = { url: string; name: string; size: number };
 
-type TProductVariant = {
+export type TProductVariant = {
   _id: string;
-  name?: string;
-  unitCount?: number;
+  name: string;
+  slug: string;
+  unitCount: number;
   flavor?: string;
   price: number;
   priceAfterDiscount?: number;
   images: TProductImage[];
+  quantity: number;
+  sold: number;
 };
 
 export type TProduct = {
   _id: string;
-  name: string;
-  slug: string;
-  images: TProductImage[];
   description: string;
   nutritionFacts: {
     servingSize: string;
@@ -35,13 +35,8 @@ export type TProduct = {
   category: Partial<TCategory>[];
   numReviews: number;
   averageRating: number;
-  price: number;
-  priceAfterDiscount?: number;
   variants: TProductVariant[];
-  quantity: number;
-  unitCount: number;
   featured: boolean;
-  sold: number;
   directionOfUse: string;
   warnings: string;
   storageConditions: string;

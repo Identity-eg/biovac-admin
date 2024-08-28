@@ -43,7 +43,7 @@ export function DataTableToolbar<TData>({
     <div className='flex items-center justify-between'>
       <div className='flex flex-1 items-center space-x-2'>
         <Input
-          placeholder='Filter orders by customer name...'
+          placeholder='Search by customer name...'
           value={searchValue}
           onChange={(event) => setSearchValue(event.target.value)}
           className='h-8 w-[250px] lg:w-[250px]'

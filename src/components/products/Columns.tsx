@@ -20,13 +20,13 @@ export const columns: ColumnDef<TProduct>[] = [
           <div className='flex-shrink-0 w-10 h-10'>
             <img
               className='w-10 h-10 rounded-full'
-              src={product.images[0].url}
-              alt={product.name}
+              src={product.variants[0].images[0].url}
+              alt={product.variants[0].name}
             />
           </div>
           <div className='ml-4'>
             <div className='text-sm font-medium text-gray-900 line-clamp-1'>
-              {product.name}
+              {product.variants[0].name}
             </div>
             <div className='text-sm text-gray-500 line-clamp-1'>
               {parse(product.description)}
@@ -79,10 +79,10 @@ export const columns: ColumnDef<TProduct>[] = [
     cell: ({ row }) => (
       <div className='flex flex-col items-center'>
         <div className='text-gray-600 font-semibold'>
-          {row.original.quantity}
+          {row.original.variants[0].quantity}
         </div>
         <span className='inline-flex px-2 text-xs font-semibold leading-5 text-green-800 bg-green-100 rounded-full'>
-          {row.original.quantity > 0 ? 'in Stock' : 'out of stock'}
+          {row.original.variants[0].quantity > 0 ? 'in Stock' : 'out of stock'}
         </span>
       </div>
     ),
@@ -94,7 +94,7 @@ export const columns: ColumnDef<TProduct>[] = [
     ),
     cell: ({ row }) => (
       <span className='inline-flex px-2 font-semibold leading-5 text-green-800 bg-purple-100 rounded-full'>
-        {row.original.sold}
+        {row.original.variants[0].sold}
       </span>
     ),
     // filterFn: (row, id, value) => {
@@ -106,11 +106,14 @@ export const columns: ColumnDef<TProduct>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title='price' />
     ),
-    cell: ({ getValue }) => {
+    cell: ({ row }) => {
       const formatted = new Intl.NumberFormat('en-US', {
         style: 'currency',
         currency: 'EGP',
-      }).format(getValue() as number);
+      }).format(
+        (row.original.variants[0].priceAfterDiscount ||
+          row.original.variants[0].price) as number
+      );
 
       return <span className='font-semibold text-gray-700'>{formatted}</span>;
     },

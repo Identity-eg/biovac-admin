@@ -41,6 +41,7 @@
     "clsx": "^2.1.0",
     "cmdk": "^1.0.0",
     "date-fns": "^3.6.0",
+    "embla-carousel-react": "^8.2.0",
     "html-react-parser": "^5.1.12",
     "jwt-decode": "^4.0.0",
     "lucide-react": "^0.364.0",
