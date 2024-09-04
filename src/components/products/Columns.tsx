@@ -16,7 +16,7 @@ export const columns: ColumnDef<TProduct>[] = [
     cell: ({ row }) => {
       const product = row.original;
       return (
-        <div className='flex items-center max-w-[50ch]'>
+        <div className='flex items-center max-w-[40ch]'>
           <div className='flex-shrink-0 w-10 h-10'>
             <img
               className='w-10 h-10 rounded-full'
@@ -76,30 +76,37 @@ export const columns: ColumnDef<TProduct>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title='quantity' />
     ),
-    cell: ({ row }) => (
-      <div className='flex flex-col items-center'>
-        <div className='text-gray-600 font-semibold'>
-          {row.original.variants[0].quantity}
+    cell: ({ row }) => {
+      const quantity = row.original.variants.reduce(
+        (total, v) => (total += v.quantity),
+        0
+      );
+      return (
+        <div className='flex flex-col items-center'>
+          <div className='text-gray-600 font-semibold'>{quantity}</div>
+          <span className='inline-flex px-2 text-xs font-semibold leading-5 text-green-800 bg-green-100 rounded-full'>
+            {quantity > 0 ? 'in Stock' : 'out of stock'}
+          </span>
         </div>
-        <span className='inline-flex px-2 text-xs font-semibold leading-5 text-green-800 bg-green-100 rounded-full'>
-          {row.original.variants[0].quantity > 0 ? 'in Stock' : 'out of stock'}
-        </span>
-      </div>
-    ),
+      );
+    },
   },
   {
     accessorKey: 'sold',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title='sold' />
     ),
-    cell: ({ row }) => (
-      <span className='inline-flex px-2 font-semibold leading-5 text-green-800 bg-purple-100 rounded-full'>
-        {row.original.variants[0].sold}
-      </span>
-    ),
-    // filterFn: (row, id, value) => {
-    //   return value.includes(row.getValue(id));
-    // },
+    cell: ({ row }) => {
+      const sold = row.original.variants.reduce(
+        (total, v) => (total += v.sold),
+        0
+      );
+      return (
+        <span className='inline-flex px-2 font-semibold leading-5 text-green-800 bg-purple-100 rounded-full'>
+          {sold}
+        </span>
+      );
+    },
   },
   {
     accessorKey: 'price',
@@ -117,9 +124,6 @@ export const columns: ColumnDef<TProduct>[] = [
 
       return <span className='font-semibold text-gray-700'>{formatted}</span>;
     },
-    // filterFn: (row, id, value) => {
-    //   return value.includes(row.getValue(id));
-    // },
   },
   {
     id: 'actions',
