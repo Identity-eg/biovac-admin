@@ -18,11 +18,11 @@ import { FormControl, FormField, FormItem, FormLabel } from '../ui/form';
 import { Input } from '../ui/input';
 import UploadImage from './UploadImages';
 // Utils
-import { TProductVariant } from '@/types/product';
 import { productSchema, variantsSchema } from './Schema';
 
 type TEditVariantFormProps = Pick<
-  TProductVariant,
+  z.infer<typeof variantsSchema>,
+  | '_id'
   | 'name'
   | 'flavor'
   | 'price'
@@ -37,6 +37,7 @@ type TEditVariantFormProps = Pick<
 
 export default function EditVariantForm({
   index,
+  _id,
   name,
   flavor,
   unitCount,
@@ -71,13 +72,13 @@ export default function EditVariantForm({
       images,
     });
   }, [name, unitCount, flavor, price, priceAfterDiscount, quantity, images]);
-  
 
   function handleSubmit(values: z.infer<typeof variantsSchema>) {
-    updateItem(index, values);
+    updateItem(index, { ...values, _id });
     setVariantForm(false);
     form.reset();
   }
+
   return (
     <Dialog open={isVariantFormOpened} onOpenChange={setVariantForm}>
       <DialogTrigger asChild>

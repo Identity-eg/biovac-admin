@@ -24,13 +24,13 @@ const imagesSchema = z.object({
 });
 
 export const variantsSchema = z.object({
+  _id: z.string().optional(),
   name: z.string().min(1, 'Name is required'),
   unitCount: z.coerce
     .number({ invalid_type_error: 'Quantity is required' })
     .min(1, 'UnitCount must be greater than 0'),
   quantity: z.coerce
-    .number({ invalid_type_error: 'Quantity is required' })
-    .min(1, 'Quantity must be greater than 0'),
+    .number({ invalid_type_error: 'Quantity is required' }),
   flavor: z.string().optional(),
   price: z.coerce
     .number({ invalid_type_error: 'Price is required' })

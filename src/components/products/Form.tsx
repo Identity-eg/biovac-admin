@@ -183,7 +183,7 @@ export default function ProductForm() {
     }
   };
   // console.log('form values', form.watch());
-  console.log('form errors', form.formState.errors);
+  // console.log('form errors', form.formState.errors);
 
   return (
     <section className='space-y-8 md:w-3/4 3xl:w-3/5 m-auto'>

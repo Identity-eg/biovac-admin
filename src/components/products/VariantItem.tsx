@@ -12,11 +12,11 @@ import { Button } from '../ui/button';
 import EditVariantForm from './EditVariantForm';
 // Utils
 import { cn } from '@/lib/utils';
-import { productSchema } from './Schema';
-import { TProductVariant } from '@/types/product';
+import { productSchema, variantsSchema } from './Schema';
 
 type TVariantItem = Pick<
-  TProductVariant,
+  z.infer<typeof variantsSchema>,
+  | '_id'
   | 'name'
   | 'flavor'
   | 'price'
@@ -32,6 +32,7 @@ type TVariantItem = Pick<
 
 export default function VariantItem({
   index,
+  _id,
   name,
   price,
   priceAfterDiscount,
@@ -43,6 +44,7 @@ export default function VariantItem({
   updateItem,
 }: TVariantItem) {
   const variant = {
+    _id,
     name,
     price,
     priceAfterDiscount,
