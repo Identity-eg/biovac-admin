@@ -1,18 +1,24 @@
 import { useEffect, useState } from 'react';
 import { useGlobalStore } from '@/store/global';
-import { X, AlignLeft, CircleUser, LayoutDashboard } from 'lucide-react';
+import {
+  X,
+  AlignLeft,
+  CircleUser,
+  LayoutDashboard,
+  LogOutIcon,
+  UserRoundPlusIcon,
+} from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu';
 import { Button } from '../ui/button';
 import { useLogout } from '@/apis/auth';
-import { useAuthStore } from '@/store/auth';
 import { USER_ROLES } from '@/constants';
+import { useGetMe } from '@/apis/users';
 // import LogoIcon from '@/assets/svgs/LogoIcon';
 
 export default function Header() {
@@ -23,7 +29,7 @@ export default function Header() {
     (state) => state.toggleSidebarMobile
   );
 
-  const user = useAuthStore((state) => state.userData);
+  const getMeQuery = useGetMe();
 
   const handlefixedNav = () =>
     window.scrollY === 0 ? setFixedNav(false) : setFixedNav(true);
@@ -58,7 +64,9 @@ export default function Header() {
       <div className='flex gap-x-4'>
         <LayoutDashboard fontSize={30} />
         <span className='capitalize'>
-          {user?.role === USER_ROLES.admin ? user.company?.name : 'super admin'}
+          {getMeQuery.data?.role === USER_ROLES.admin
+            ? getMeQuery.data.company?.name
+            : 'super admin'}
         </span>
       </div>
       <DropdownMenu>
@@ -68,14 +76,17 @@ export default function Header() {
             <span className='sr-only'>Toggle user menu</span>
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align='end'>
-          <DropdownMenuLabel>My Account</DropdownMenuLabel>
+        <DropdownMenuContent align='end' className='w-40'>
+          <DropdownMenuItem className='flex gap-x-4'>
+            <UserRoundPlusIcon size={18} />
+            My profile
+          </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>Settings</DropdownMenuItem>
-          <DropdownMenuItem>Support</DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => logoutMutation.mutate()}>
-            Logout
+          <DropdownMenuItem
+            className='flex gap-x-4'
+            onClick={() => logoutMutation.mutate()}
+          >
+            <LogOutIcon size={18} /> Logout
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

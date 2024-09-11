@@ -1,9 +1,13 @@
 import { ReactNode } from 'react';
 import { Navigate } from 'react-router-dom';
 import { USER_ROLES } from '@/constants';
-import { useAuthStore } from '@/store/auth';
+import { useGetMe } from '@/apis/users';
 
 export default function SuperAdminRoute({ children }: { children: ReactNode }) {
-  const user = useAuthStore((state) => state.userData);
-  return user?.role === USER_ROLES.superAdmin ? children : <Navigate to='/' />;
+  const getMeQuery = useGetMe();
+  return getMeQuery.data?.role === USER_ROLES.superAdmin ? (
+    children
+  ) : (
+    <Navigate to='/' />
+  );
 }

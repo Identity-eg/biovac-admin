@@ -54,12 +54,13 @@ import { getDirtyFields } from '@/lib/utils';
 import WhiteOverlay from '@/lib/whiteOverlay';
 import TiptapEditor from '@/lib/tiptap';
 import { productSchema } from './Schema';
-import { useAuthStore } from '@/store/auth';
 import { USER_ROLES } from '@/constants';
+import { useGetMe } from '@/apis/users';
 
 export default function ProductForm() {
   const { productId } = useParams();
-  const user = useAuthStore((state) => state.userData);
+
+  const getMeQuery = useGetMe();
 
   const form = useForm<z.infer<typeof productSchema>>({
     defaultValues: {
@@ -70,7 +71,7 @@ export default function ProductForm() {
         ingredients: [],
         otherIngredients: [],
       },
-      company: user?.company ? user.company._id : '',
+      company: getMeQuery.data?.company ? getMeQuery.data.company._id : '',
       category: [],
       dosageForm: '',
       featured: false,
@@ -202,7 +203,7 @@ export default function ProductForm() {
           {viewProductQuery.isLoading && <WhiteOverlay />}
           <Card className='p-6 grid lg:grid-cols-2 gap-x-4 gap-y-6'>
             {/* Company */}
-            {user?.role === USER_ROLES.superAdmin && (
+            {getMeQuery.data?.role === USER_ROLES.superAdmin && (
               <FormField
                 control={form.control}
                 name='company'

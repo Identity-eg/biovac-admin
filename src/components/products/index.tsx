@@ -8,15 +8,15 @@ import { Button } from '../ui/button';
 // Utils
 import { useGetProducts } from '@/apis/products';
 import useGetSearchParams from '@/hooks/useGetSearchParams';
-import { useAuthStore } from '@/store/auth';
+import { useGetMe } from '@/apis/users';
 
 export default function ProductsPage() {
-  const user = useAuthStore((state) => state.userData);
-
   const params = useGetSearchParams();
+
+  const getMeQuery = useGetMe();
   const productsQuery = useGetProducts({
     ...params,
-    ...(user?.company && { company: user.company._id }),
+    ...(getMeQuery.data?.company && { company: getMeQuery.data.company._id }),
   });
 
   if (productsQuery.isLoading) return <LoaderComponent />;

@@ -1,12 +1,9 @@
 import { useMutation } from '@tanstack/react-query';
-import { jwtDecode } from 'jwt-decode';
 import { request } from '../client';
 import { useAuthStore } from '@/store/auth';
-import { TUser } from '@/types/user';
 
 export type TLoginResponse = {
   accessToken: string;
-  user: TUser;
 };
 
 // ######################## Login ############################

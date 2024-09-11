@@ -4,7 +4,7 @@ import { LayoutDashboard, X } from 'lucide-react';
 import { navLinks } from '@/constants/navLinks';
 import { useGlobalStore } from '@/store/global';
 import { cn } from '@/lib/utils';
-import { useAuthStore } from '@/store/auth';
+import { useGetMe } from '@/apis/users';
 
 export default function Sidebar() {
   const { pathname } = useLocation();
@@ -14,7 +14,7 @@ export default function Sidebar() {
     (state) => state.toggleSidebarMobile
   );
 
-  const user = useAuthStore((state) => state.userData);
+  const getMeQuery = useGetMe();
 
   return (
     <aside
@@ -42,7 +42,11 @@ export default function Sidebar() {
           </div>
         </li>
         {navLinks
-          .filter((li) => (user?.role ? li.roles.includes(user?.role) : false))
+          .filter((li) =>
+            getMeQuery.data?.role
+              ? li.roles.includes(getMeQuery.data?.role)
+              : false
+          )
           .map((li, i) => (
             <li
               key={i}
