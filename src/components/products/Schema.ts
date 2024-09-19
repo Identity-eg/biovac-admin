@@ -29,8 +29,7 @@ export const variantsSchema = z.object({
   unitCount: z.coerce
     .number({ invalid_type_error: 'Quantity is required' })
     .min(1, 'UnitCount must be greater than 0'),
-  quantity: z.coerce
-    .number({ invalid_type_error: 'Quantity is required' }),
+  quantity: z.coerce.number({ invalid_type_error: 'Quantity is required' }),
   flavor: z.string().optional(),
   price: z.coerce
     .number({ invalid_type_error: 'Price is required' })
@@ -48,9 +47,7 @@ export const productSchema = z.object({
     .min(1, 'Category is required'),
   dosageForm: z.string().min(1, 'Dosage Form is required'),
   featured: z.boolean(),
-  variants: z
-    .array(variantsSchema)
-    .min(1, 'Variants must be one element at least'),
+  variants: z.array(variantsSchema).min(1, 'Variants must be one element at least'),
   directionOfUse: z.string().min(1, 'Direction of use is required'),
   warnings: z.string(),
   storageConditions: z.string(),

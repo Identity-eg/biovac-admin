@@ -19,6 +19,7 @@ import { Input } from '../ui/input';
 import UploadImage from './UploadImages';
 // Utils
 import { productSchema, variantsSchema } from './Schema';
+import { useUpdateVariant } from '@/apis/variants';
 
 type TEditVariantFormProps = Pick<
   z.infer<typeof variantsSchema>,
@@ -61,6 +62,8 @@ export default function EditVariantForm({
     resolver: zodResolver(variantsSchema),
   });
 
+  const updateVariant = useUpdateVariant()
+
   useEffect(() => {
     form.reset({
       name,
@@ -74,9 +77,14 @@ export default function EditVariantForm({
   }, [name, unitCount, flavor, price, priceAfterDiscount, quantity, images]);
 
   function handleSubmit(values: z.infer<typeof variantsSchema>) {
-    updateItem(index, { ...values, _id });
-    setVariantForm(false);
-    form.reset();
+    if (_id) {
+      updateVariant.mutate({ data: values, id: _id }, {onSuccess: (data) => {
+        updateItem(index, data.variant);
+        setVariantForm(false);
+        form.reset();
+      }});
+      
+    }
   }
 
   return (

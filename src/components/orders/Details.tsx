@@ -14,6 +14,7 @@ export default function OrderDetails() {
   const orderQuery = useViewOrder({ id: params.orderId });
 
   if (orderQuery.isError) return <div>error</div>;
+// console.log(orderQuery.data);
 
   return (
     <div className='space-y-10 md:w-3/4 m-auto'>
@@ -27,11 +28,17 @@ export default function OrderDetails() {
         <LoaderComponent />
       ) : (
         <section className='space-y-8'>
-          <div className='border border-slate-200 p-6 grid grid-cols-3'>
+          <div className='border border-slate-200 p-6 grid grid-cols-4'>
             <div>
               <h6 className='capitalize text-slate-500'>order date</h6>
               <p className='font-semibold'>
                 {formatDate(orderQuery.data.createdAt, 'PP')}
+              </p>
+            </div>
+            <div className='border-s ps-4 space-y-1'>
+              <h6 className='capitalize text-slate-500'>order status</h6>
+              <p className='font-semibold'>
+                {orderQuery.data.status}
               </p>
             </div>
             <div className='border-s ps-4 space-y-1'>

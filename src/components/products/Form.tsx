@@ -156,7 +156,11 @@ export default function ProductForm() {
   }, [viewProductQuery.data]);
 
   const onSubmit = (values: z.infer<typeof productSchema>) => {
-    const dirtyValues = getDirtyFields(values, form.formState.dirtyFields);
+    const newValues = {
+      ...values,
+      variants: values.variants.map((v) => v._id),
+    };
+    const dirtyValues = getDirtyFields(newValues, form.formState.dirtyFields);
 
     const data = {
       ...dirtyValues,
@@ -183,7 +187,7 @@ export default function ProductForm() {
       );
     }
   };
-  // console.log('form values', form.watch());
+  console.log('form values', form.watch());
   // console.log('form errors', form.formState.errors);
 
   return (
@@ -553,7 +557,6 @@ export default function ProductForm() {
                   gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
                 }}
               >
-                {/* <section> */}
                 {variantsFields.map((variant, index) => (
                   <VariantItem
                     key={variant.name}
@@ -563,7 +566,6 @@ export default function ProductForm() {
                     updateItem={variantsUpdate}
                   />
                 ))}
-                {/* </section> */}
               </CardContent>
             </Card>
           )}

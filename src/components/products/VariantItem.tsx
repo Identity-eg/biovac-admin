@@ -13,6 +13,7 @@ import EditVariantForm from './EditVariantForm';
 // Utils
 import { cn } from '@/lib/utils';
 import { productSchema, variantsSchema } from './Schema';
+import { useDeleteVariant } from '@/apis/variants';
 
 type TVariantItem = Pick<
   z.infer<typeof variantsSchema>,
@@ -43,6 +44,14 @@ export default function VariantItem({
   removeItem,
   updateItem,
 }: TVariantItem) {
+  const deleteVariant = useDeleteVariant();
+  const handleDelete = () => {
+    if (_id) {
+      deleteVariant.mutate(_id, { onSuccess: () => {
+        removeItem(index);
+      } });
+    }
+  };
   const variant = {
     _id,
     name,
@@ -113,7 +122,7 @@ export default function VariantItem({
           className='bg-red-50 hover:bg-red-100'
           size='icon'
           type='button'
-          onClick={() => removeItem(index)}
+          onClick={handleDelete}
         >
           <Trash2Icon size={16} color='red' />
         </Button>

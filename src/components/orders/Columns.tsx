@@ -43,11 +43,12 @@ export const columns: ColumnDef<TOrder>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title='total price' />
     ),
-    cell: ({ getValue }) => {
+    cell: ({ row }) => {
+      const actualPrice = row.original.total / 100;
       const formatted = new Intl.NumberFormat('en-US', {
         style: 'currency',
         currency: 'EGP',
-      }).format(getValue() as number);
+      }).format(actualPrice);
 
       return <span className='font-semibold text-gray-700'>{formatted}</span>;
     },

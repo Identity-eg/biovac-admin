@@ -19,6 +19,7 @@ import { Input } from '../ui/input';
 import UploadImage from './UploadImages';
 // Utils
 import { productSchema, variantsSchema } from './Schema';
+import { useAddVariant } from '@/apis/variants';
 
 export default function VariantForm({
   variantsAppend,
@@ -42,10 +43,16 @@ export default function VariantForm({
     resolver: zodResolver(variantsSchema),
   });
 
+  const addVariant = useAddVariant();
+
   function handleSubmit(values: z.infer<typeof variantsSchema>) {
-    variantsAppend(values);
-    setVariantForm(false);
-    form.reset();
+    addVariant.mutate(values, {
+      onSuccess: (data) => {
+        variantsAppend(data.variant);
+        setVariantForm(false);
+        form.reset();
+      },
+    });
   }
   // console.log('child errors', form.formState.errors);
   return (
