@@ -7,7 +7,7 @@ import { z } from 'zod';
 import { Input } from '../ui/input';
 import ImagesView from './ImagesView';
 // Utils
-import { useUploadImage } from '@/apis/products';
+import { useUploadMultipleImage } from '@/apis/upload';
 import { variantsSchema } from './Schema';
 
 export default function UploadImage({
@@ -17,14 +17,14 @@ export default function UploadImage({
   getValues: UseFormGetValues<z.infer<typeof variantsSchema>>;
   setValue: UseFormSetValue<z.infer<typeof variantsSchema>>;
 }) {
-  const uploadImage = useUploadImage();
+  const uploadImage = useUploadMultipleImage();
 
   const onDrop = useCallback((droppedFiles: File[]) => {
     // console.log('droppedFiles', droppedFiles);
     const imageFiles = droppedFiles;
     const formData = new FormData();
     imageFiles.forEach((file) => {
-      formData.append('image', file);
+      formData.append('images', file);
     });
 
     uploadImage.mutate(

@@ -5,12 +5,7 @@ import { Loader2Icon, Undo2Icon } from 'lucide-react';
 import { z } from 'zod';
 
 import { IMAGES_PATHS } from '@/constants';
-import {
-  useCreateImage,
-  useUpdateImage,
-  useViewImage,
-  viewImage,
-} from '@/apis/images';
+import { useCreateImage, useUpdateImage, useViewImage } from '@/apis/images';
 import {
   filterTruthyValues,
   getDirtyFields,
@@ -30,14 +25,12 @@ import TiptapEditor from '@/lib/tiptap';
 import UploadImage from './components/UploadImage';
 import { useEffect } from 'react';
 
-const imagesSchema = z.object({
-  url: z.string().min(1, { message: 'URL is required' }),
-  name: z.string().min(1, { message: 'Name is required' }),
-  size: z.number().min(1, { message: 'Size is required' }),
-});
-
 const imageSchema = z.object({
-  image: z.array(imagesSchema).min(1, { message: 'Image is required' }),
+  image: z.object({
+    url: z.string().min(1, { message: 'URL is required' }),
+    name: z.string().min(1, { message: 'Name is required' }),
+    size: z.number().min(1, { message: 'Size is required' }),
+  }).nullable(),
   path: unionOfLiterals(Object.values(IMAGES_PATHS)),
   title: z.string(),
   description: z.string(),
@@ -45,12 +38,12 @@ const imageSchema = z.object({
 });
 
 export default function ImageForm() {
-  const { imageId, path } = useParams();
+  const { imageId } = useParams();
   const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof imageSchema>>({
     defaultValues: {
-      image: [],
+      image: null,
       path: 'hero',
       title: '',
       description: '',

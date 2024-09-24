@@ -141,16 +141,3 @@ export function useDeleteProduct() {
   });
 }
 
-// ####################### Upload Product Image #######################
-const uploadImage = async ({ formData }: { formData: FormData }) => {
-  const { data } = await request({
-    url: `products/uploadImage`,
-    method: 'POST',
-    data: formData,
-  });
-  return data;
-};
-
-export function useUploadImage() {
-  return useMutation({ mutationFn: uploadImage, retry: false });
-}

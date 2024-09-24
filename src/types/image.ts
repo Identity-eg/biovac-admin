@@ -7,7 +7,7 @@ export type TImage = {
     name: string;
     size: number;
     url: string;
-  }[];
+  };
   title: string;
   description: string;
   path: TPath;

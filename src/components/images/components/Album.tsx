@@ -28,8 +28,8 @@ export function AlbumArtwork({
       <div className={cn('space-y-3', className)} {...props}>
         <div className='overflow-hidden rounded-md'>
           <img
-            src={album.image[0].url}
-            alt={album.image[0].name}
+            src={album.image.url}
+            alt={album.image.name}
             width={width}
             height={height}
             className={cn(

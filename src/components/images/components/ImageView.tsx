@@ -13,14 +13,14 @@ type TImage = {
   url: string;
 };
 
-export default function UploadedImagesView({ images }: { images: TImage[] }) {
+export default function UploadedImagesView({ image }: { image: TImage }) {
   const { setValue } = useFormContext();
 
   const handleDelete = () => {
-    setValue('image', [], { shouldDirty: true });
+    setValue('image', null, { shouldDirty: true });
   };
 
-  return images.map((image) => (
+  return (
     <Card className='flex justify-between items-center' key={image.url}>
       <CardHeader className='flex flex-row gap-x-4 p-2 pt-0 md:p-4'>
         <img
@@ -52,5 +52,5 @@ export default function UploadedImagesView({ images }: { images: TImage[] }) {
         </Button>
       </div>
     </Card>
-  ));
+  );
 }

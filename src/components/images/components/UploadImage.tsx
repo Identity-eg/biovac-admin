@@ -4,26 +4,32 @@ import { useFormContext } from 'react-hook-form';
 import { useDropzone } from 'react-dropzone';
 // UI
 import { Input } from '@/components/ui/input';
-import ImagesView from './UploadedImagesView';
+import ImageView from './ImageView';
 // Utils
-import { useUploadImage } from '@/apis/products';
+import { useUploadSingleImage } from '@/apis/upload';
 
 export default function UploadImage() {
   const { setValue, getValues } = useFormContext();
-  const uploadImage = useUploadImage();
+  const uploadImage = useUploadSingleImage();
 
   const onDrop = useCallback((droppedFiles: File[]) => {
     // console.log("droppedFiles", droppedFiles);
     const imageFile = droppedFiles[0];
     const formData = new FormData();
+
     formData.append('image', imageFile);
+
     uploadImage.mutate(
       { formData },
       {
         onSuccess: ({ image }) => {
           setValue(
             'image',
-            [{ name: imageFile.name, size: imageFile.size, url: image }],
+            {
+              name: imageFile.name,
+              size: imageFile.size,
+              url: image,
+            },
             {
               shouldValidate: true,
               shouldDirty: true,
@@ -65,7 +71,7 @@ export default function UploadImage() {
           )}
         </div>
       </div>
-      <ImagesView images={[...getValues('image')]} />
+      {getValues('image') && <ImageView image={getValues('image')} />}
     </>
   );
 }
