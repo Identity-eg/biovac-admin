@@ -8,6 +8,8 @@ export type TUser = {
   email: string;
   role: typeof USER_ROLES.admin | typeof USER_ROLES.superAdmin;
   company?: TCompany;
+  blocked: boolean;
+  ordersCount: number;
   createdAt: string;
   updatedAt: string;
 };

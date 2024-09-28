@@ -19,7 +19,7 @@ export const columns: ColumnDef<TUser>[] = [
       return (
         <>
           <div className='text-sm font-medium text-gray-900 line-clamp-1'>
-            {customer.name}
+            {customer.firstName}
           </div>
           <span className='text-xs text-gray-600'>{customer._id}</span>
         </>

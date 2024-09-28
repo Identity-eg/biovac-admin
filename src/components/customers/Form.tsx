@@ -20,8 +20,11 @@ import { useUpdateUser, useViewUser } from '@/apis/customers';
 import { getDirtyFields } from '@/lib/utils';
 
 const userSchema = z.object({
-  name: z.string().min(1, {
-    message: 'Name is required',
+  firstName: z.string().min(1, {
+    message: 'First Name is required',
+  }),
+  lastName: z.string().min(1, {
+    message: 'Last Name is required',
   }),
   email: z
     .string()
@@ -36,7 +39,8 @@ export default function UserForm() {
 
   const form = useForm<z.infer<typeof userSchema>>({
     defaultValues: {
-      name: '',
+      firstName: '',
+      lastName: '',
       email: '',
     },
     resolver: zodResolver(userSchema),
@@ -52,9 +56,10 @@ export default function UserForm() {
 
   useEffect(() => {
     if (viewUserQuery.data) {
-      const { name, email } = viewUserQuery.data;
+      const { firstName, lastName, email } = viewUserQuery.data;
       const newValues = {
-        name,
+        firstName,
+        lastName,
         email,
       };
       form.reset(newValues);
@@ -89,15 +94,29 @@ export default function UserForm() {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
           <div className='grid grid-cols-2 gap-8'>
-            {/* Name */}
+            {/* First Name */}
             <FormField
               control={form.control}
-              name='name'
+              name='firstName'
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>name</FormLabel>
+                  <FormLabel>First name</FormLabel>
                   <FormControl>
-                    <Input placeholder='username...' {...field} />
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            {/* Last Name */}
+            <FormField
+              control={form.control}
+              name='lastName'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Last name</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
