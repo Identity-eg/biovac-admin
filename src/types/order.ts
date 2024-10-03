@@ -1,34 +1,49 @@
-import { ORDER_STATUS } from "@/constants";
+import { ORDER_STATUS } from '@/constants';
+import { TVariant } from './variant';
 
 export type TOrderItem = {
-  product: {
-    _id: string;
-    description: string;
-  };
+  product: string;
   amount: number;
-  price: number;
-  name: string;
-  image: string;
-  _id: string;
+  variant: TVariant;
+  totalProductPrice: number;
 };
+
+type TAddress = {
+  user: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  governorate: string;
+  city: string;
+  phone: number;
+  additionalPhone: number;
+  street: string;
+  buildingNo: string;
+  floor: string;
+};
+
+// type TOrderStatus = 
 
 export type TOrder = {
   _id: string;
-  shippingAddress: {
-    street: string;
-    city: string;
-    state: string;
-  };
+  shippingAddress: TAddress;
   user: {
     _id: string;
-    name: string;
+    firstName: string;
+    lastName: string;
+    fullName: string;
     email: string;
   };
   orderItems: TOrderItem[];
   shippingFee: number;
   subtotal: number;
   total: number;
-  status: (typeof ORDER_STATUS)[number];
+  status: (typeof ORDER_STATUS)[keyof typeof ORDER_STATUS]["value"];
+  paid: boolean;
+  paymentMethod: {
+    id: string;
+    name: string;
+  };
   deliveredAt: string;
   createdAt: string;
   updatedAt: string;

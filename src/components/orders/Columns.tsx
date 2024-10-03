@@ -18,7 +18,7 @@ export const columns: ColumnDef<TOrder>[] = [
       return (
         <div className=''>
           <div className='text-sm font-medium text-gray-900 line-clamp-1'>
-            {order.user.name}
+            {order.user.fullName}
           </div>
           <div className='text-sm text-gray-500 line-clamp-1'>
             {order.user.email}
@@ -39,12 +39,26 @@ export const columns: ColumnDef<TOrder>[] = [
   },
 
   {
+    accessorKey: 'paid',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title='paid' />
+    ),
+    cell: ({ row }) => {
+      return row.original.paid ? (
+        <Badge className='capitalize bg-green-500'>paid</Badge>
+      ) : (
+        <Badge className='capitalize bg-orange-400'>unpaid</Badge>
+      );
+    },
+    enableSorting: false,
+  },
+  {
     accessorKey: 'total',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title='total price' />
     ),
     cell: ({ row }) => {
-      const actualPrice = row.original.total / 100;
+      const actualPrice = row.original.total;
       const formatted = new Intl.NumberFormat('en-US', {
         style: 'currency',
         currency: 'EGP',
@@ -52,6 +66,20 @@ export const columns: ColumnDef<TOrder>[] = [
 
       return <span className='font-semibold text-gray-700'>{formatted}</span>;
     },
+  },
+  {
+    accessorKey: 'paymentMethod',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title='payment method' />
+    ),
+    cell: ({ row }) => {
+      return (
+        <span className='font-semibold text-gray-700'>
+          {row.original.paymentMethod.name}
+        </span>
+      );
+    },
+    enableSorting: false,
   },
   {
     accessorKey: 'createdAt',
@@ -62,6 +90,35 @@ export const columns: ColumnDef<TOrder>[] = [
       const formattedDate = formatDistanceToNow(row.original.createdAt);
       return (
         <span className='font-semibold text-gray-600'>{formattedDate}</span>
+      );
+    },
+    enableSorting: false,
+  },
+  {
+    accessorKey: 'deliveredAt',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title='delivery date' />
+    ),
+    cell: ({ row }) => {
+      // const formattedDate = formatDistanceToNow(row.original.createdAt);
+      return (
+        <span className='font-semibold text-gray-600'>
+          {row.original.deliveredAt ?? '---'}
+        </span>
+      );
+    },
+    enableSorting: false,
+  },
+  {
+    accessorKey: 'orderItems',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title='number of items' />
+    ),
+    cell: ({ row }) => {
+      return (
+        <span className='font-semibold text-gray-600'>
+          {row.original.orderItems.length}
+        </span>
       );
     },
     enableSorting: false,

@@ -8,7 +8,7 @@ import {
 import { request } from '../client';
 import { TOrder } from '@/types/order';
 
-// ####################### Get Orders #######################
+// ####################### Get All Orders #######################
 type GetOrdersReturnType = {
   currentPage: number;
   lastPage: number;
@@ -16,7 +16,7 @@ type GetOrdersReturnType = {
   totalCount: number;
 };
 
-const getOrders = async ({
+const getAllOrders = async ({
   pageParam,
   ...rest
 }: {
@@ -31,10 +31,42 @@ const getOrders = async ({
   return data;
 };
 
-export function useGetOrders(props?: any) {
+export function useGetAllOrders(props?: any) {
   return useInfiniteQuery({
-    queryKey: ['get-orders', props],
-    queryFn: ({ pageParam }) => getOrders({ pageParam, ...props }),
+    queryKey: ['get-all-orders', props],
+    queryFn: ({ pageParam }) => getAllOrders({ pageParam, ...props }),
+    placeholderData: keepPreviousData,
+    initialPageParam: 1,
+    getNextPageParam: ({ currentPage, lastPage }) => {
+      if (currentPage < lastPage) {
+        return currentPage + 1;
+      } else {
+        return undefined;
+      }
+    },
+  });
+}
+
+// ####################### Get Company Orders #######################
+const getCompanyOrders = async ({
+  pageParam,
+  ...rest
+}: {
+  pageParam: number;
+}): Promise<GetOrdersReturnType> => {
+  const params = { page: pageParam, ...rest };
+  const { data } = await request({
+    url: 'orders/my-company-orders',
+    method: 'GET',
+    params,
+  });
+  return data;
+};
+
+export function useGetCompanyOrders(props?: any) {
+  return useInfiniteQuery({
+    queryKey: ['get-company-orders', props],
+    queryFn: ({ pageParam }) => getCompanyOrders({ pageParam, ...props }),
     placeholderData: keepPreviousData,
     initialPageParam: 1,
     getNextPageParam: ({ currentPage, lastPage }) => {
@@ -133,7 +165,7 @@ export function useDeleteOrder() {
     mutationFn: deleteOrder,
     onSettled: () => {
       // parameters: data, error, variables, context
-      queryClient.invalidateQueries({ queryKey: ['get-orders'] });
+      queryClient.invalidateQueries({ queryKey: ['get-all-orders'] });
     },
   });
 }

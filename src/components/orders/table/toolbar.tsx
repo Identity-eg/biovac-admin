@@ -52,9 +52,9 @@ export function DataTableToolbar<TData>({
           <DataTableFacetedFilter
             column={table.getColumn('status')}
             title='Status'
-            options={ORDER_STATUS.map((status) => ({
-              label: status,
-              value: status,
+            options={Object.values(ORDER_STATUS).map((status) => ({
+              label: status.label,
+              value: status.value,
             }))}
           />
         )}
