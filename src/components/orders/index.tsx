@@ -8,8 +8,9 @@ import LoaderComponent from '../ui/loader';
 
 export default function OrdersPage() {
   const getMeQuery = useGetMe();
-  if (getMeQuery.isPending) return <LoaderComponent />
-  return getMeQuery.data?.role === USER_ROLES.superAdmin ? (
+  if (getMeQuery.isPending) return <LoaderComponent />;
+  if (getMeQuery.isError) return <div>error</div>;
+  return getMeQuery.data.role === USER_ROLES.superAdmin ? (
     <AllOrders />
   ) : (
     <CompanyOrders />
