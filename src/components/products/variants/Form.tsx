@@ -13,12 +13,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Button } from '../ui/button';
-import { FormControl, FormField, FormItem, FormLabel } from '../ui/form';
-import { Input } from '../ui/input';
-import UploadImage from './UploadImages';
+import { Button } from '@/components/ui/button';
+import { FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import UploadImage from '../UploadImages';
 // Utils
-import { productSchema, variantsSchema } from './Schema';
+import { productSchema, variantsSchema } from '../Schema';
 import { useAddVariant } from '@/apis/variants';
 
 export default function VariantForm({

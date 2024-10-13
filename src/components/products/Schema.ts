@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-const nutrationFactSchema = {
+export const nutrationFactSchema = {
   servingSize: z.string().min(1, 'Size is required'),
   servingPerContainer: z.string().min(1, 'Container is required'),
   ingredients: z

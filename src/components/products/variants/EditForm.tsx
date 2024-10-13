@@ -12,13 +12,13 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '../ui/dialog';
-import { Button } from '../ui/button';
-import { FormControl, FormField, FormItem, FormLabel } from '../ui/form';
-import { Input } from '../ui/input';
-import UploadImage from './UploadImages';
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import UploadImage from '../UploadImages';
 // Utils
-import { productSchema, variantsSchema } from './Schema';
+import { productSchema, variantsSchema } from '../Schema';
 import { useUpdateVariant } from '@/apis/variants';
 
 type TEditVariantFormProps = Pick<
@@ -62,7 +62,7 @@ export default function EditVariantForm({
     resolver: zodResolver(variantsSchema),
   });
 
-  const updateVariant = useUpdateVariant()
+  const updateVariant = useUpdateVariant();
 
   useEffect(() => {
     form.reset({
@@ -78,12 +78,16 @@ export default function EditVariantForm({
 
   function handleSubmit(values: z.infer<typeof variantsSchema>) {
     if (_id) {
-      updateVariant.mutate({ data: values, id: _id }, {onSuccess: (data) => {
-        updateItem(index, data.variant);
-        setVariantForm(false);
-        form.reset();
-      }});
-      
+      updateVariant.mutate(
+        { data: values, id: _id },
+        {
+          onSuccess: (data) => {
+            updateItem(index, data.variant);
+            setVariantForm(false);
+            form.reset();
+          },
+        }
+      );
     }
   }
 

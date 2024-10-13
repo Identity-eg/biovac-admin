@@ -45,9 +45,13 @@ export const columns: ColumnDef<TOrder>[] = [
     ),
     cell: ({ row }) => {
       return row.original.paid ? (
-        <Badge className='capitalize bg-green-500'>paid</Badge>
+        <Badge className='capitalize bg-green-500 hover:bg-green-500'>
+          paid
+        </Badge>
       ) : (
-        <Badge className='capitalize bg-orange-400'>unpaid</Badge>
+        <Badge className='capitalize bg-orange-400 hover:bg-orange-400'>
+          unpaid
+        </Badge>
       );
     },
     enableSorting: false,

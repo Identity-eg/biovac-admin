@@ -39,8 +39,8 @@ import {
   TableHeader,
   TableRow,
 } from '../ui/table';
-import VariantForm from './VariantForm';
-import VariantItem from './VariantItem';
+import VariantForm from './variants/Form';
+import VariantItem from './variants/Item';
 // Utils
 import { useGetCategories } from '@/apis/categories';
 import {
@@ -56,6 +56,8 @@ import TiptapEditor from '@/lib/tiptap';
 import { productSchema } from './Schema';
 import { USER_ROLES } from '@/constants';
 import { useGetMe } from '@/apis/users';
+import IngrediantForm from './ingrediants/Form';
+import OtherIngrediantForm from './otherIngrediants/Form';
 
 export default function ProductForm() {
   const { productId } = useParams();
@@ -338,72 +340,32 @@ export default function ProductForm() {
             <div className='space-y-6'>
               {ingredientsFields.length > 0 && (
                 <Table>
-                  <TableCaption className='mt-0 mb-4'>
-                    A list of your product ingrediants.
+                  <TableCaption className='mt-4 font-bold'>
+                    Ingrediants.
                   </TableCaption>
-                  <TableHeader className='bg-white capitalize text-xs'>
+                  <TableHeader className='capitalize text-xs'>
                     <TableRow>
-                      <TableHead className=''>Name</TableHead>
-                      <TableHead>Amount Per Serving</TableHead>
+                      <TableHead>Name</TableHead>
+                      <TableHead>
+                        Amount Per Serving
+                      </TableHead>
                       <TableHead>Daily Value</TableHead>
                       <TableHead className='text-right'>Action</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {ingredientsFields.map((field, index) => (
-                      <TableRow key={field.id} className='hover:bg-white'>
+                      <TableRow key={field.id} className=''>
                         <TableCell className='font-medium py-0'>
-                          <FormField
-                            control={form.control}
-                            name={`nutritionFacts.ingredients.${index}.name`}
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormControl>
-                                  <Input
-                                    {...field}
-                                    className='focus-visible:ring-0 border-none focus-visible:ring-offset-0'
-                                  />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
+                          {field.name}
                         </TableCell>
                         <TableCell className='py-0'>
-                          <FormField
-                            control={form.control}
-                            name={`nutritionFacts.ingredients.${index}.amountPerServing`}
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormControl>
-                                  <Input
-                                    {...field}
-                                    className='focus-visible:ring-0 border-none focus-visible:ring-offset-0'
-                                  />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
+                          {field.amountPerServing}
                         </TableCell>
-                        <TableCell className='text-right py-0'>
-                          <FormField
-                            control={form.control}
-                            name={`nutritionFacts.ingredients.${index}.dailyValue`}
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormControl>
-                                  <Input
-                                    {...field}
-                                    className='focus-visible:ring-0 border-none focus-visible:ring-offset-0'
-                                  />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
+                        <TableCell className='py-0'>
+                          {field.dailyValue}
                         </TableCell>
-                        <TableCell>
+                        <TableCell className='text-right'>
                           <Button
                             type='button'
                             size='icon'
@@ -426,11 +388,11 @@ export default function ProductForm() {
                 </Table>
               )}
               {otherIngredientsFields.length > 0 && (
-                <Table>
-                  <TableCaption className='mt-0 mb-4'>
-                    A list of your product other ingrediants.
+                <Table className='mb-4'>
+                  <TableCaption className='mt-4 font-bold'>
+                    Other Ingrediants.
                   </TableCaption>
-                  <TableHeader className='bg-white capitalize text-xs'>
+                  <TableHeader className='capitalize text-xs'>
                     <TableRow>
                       <TableHead className=''>Name</TableHead>
                       <TableHead className=''>Action</TableHead>
@@ -440,21 +402,7 @@ export default function ProductForm() {
                     {otherIngredientsFields.map((field, index) => (
                       <TableRow key={field.id} className='hover:bg-white'>
                         <TableCell className='font-medium py-1'>
-                          <FormField
-                            control={form.control}
-                            name={`nutritionFacts.otherIngredients.${index}.name`}
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormControl>
-                                  <Input
-                                    {...field}
-                                    className='focus-visible:ring-0 border-none focus-visible:ring-offset-0'
-                                  />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
+                          {field.name}
                         </TableCell>
                         <TableCell>
                           <Button
@@ -478,35 +426,11 @@ export default function ProductForm() {
               )}
             </div>
             <CardFooter className='grid lg:grid-cols-2 gap-x-4 gap-y-6'>
-              <Button
-                type='button'
-                variant='secondary'
-                className='space-x-4'
-                onClick={() =>
-                  ingredientsAppend({
-                    name: '',
-                    amountPerServing: '',
-                    dailyValue: '',
-                  })
-                }
-              >
-                <PlusCircle />
-                <span>Add Ingredients</span>
-              </Button>
+              <IngrediantForm ingredientsAppend={ingredientsAppend} />
 
-              <Button
-                type='button'
-                variant='secondary'
-                className='space-x-4'
-                onClick={() =>
-                  otherIngredientsAppend({
-                    name: '',
-                  })
-                }
-              >
-                <PlusCircle />
-                <span>Add Other Ingredients</span>
-              </Button>
+              <OtherIngrediantForm
+                otherIngredientsAppend={otherIngredientsAppend}
+              />
               {form.formState.errors.nutritionFacts?.ingredients && (
                 <p className='text-sm font-medium text-destructive col-start-1'>
                   {String(

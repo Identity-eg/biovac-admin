@@ -7,12 +7,12 @@ import {
   CarouselContent,
   CarouselDots,
   CarouselItem,
-} from '../ui/carousel';
-import { Button } from '../ui/button';
-import EditVariantForm from './EditVariantForm';
+} from '@/components/ui/carousel';
+import { Button } from '@/components/ui/button';
+import EditVariantForm from './EditForm';
 // Utils
 import { cn } from '@/lib/utils';
-import { productSchema, variantsSchema } from './Schema';
+import { productSchema, variantsSchema } from '../Schema';
 import { useDeleteVariant } from '@/apis/variants';
 
 type TVariantItem = Pick<
@@ -47,9 +47,11 @@ export default function VariantItem({
   const deleteVariant = useDeleteVariant();
   const handleDelete = () => {
     if (_id) {
-      deleteVariant.mutate(_id, { onSuccess: () => {
-        removeItem(index);
-      } });
+      deleteVariant.mutate(_id, {
+        onSuccess: () => {
+          removeItem(index);
+        },
+      });
     }
   };
   const variant = {
