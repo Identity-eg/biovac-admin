@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Undo2 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-
+import { Undo2 } from 'lucide-react';
+// UI
 import { Button } from '../ui/button';
 import {
   Form,
@@ -15,7 +15,7 @@ import {
   FormMessage,
 } from '../ui/form';
 import { Input } from '../ui/input';
-
+// Utils
 import { useUpdateUser, useViewUser } from '@/apis/customers';
 import { getDirtyFields } from '@/lib/utils';
 
@@ -130,7 +130,7 @@ export default function UserForm() {
                 <FormItem>
                   <FormLabel>email</FormLabel>
                   <FormControl>
-                    <Input placeholder='user email...' {...field} />
+                    <Input type='email' placeholder='user email...' {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

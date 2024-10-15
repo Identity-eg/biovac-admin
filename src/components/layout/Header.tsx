@@ -7,6 +7,7 @@ import {
   LayoutDashboard,
   LogOutIcon,
   UserRoundPlusIcon,
+  BoltIcon,
 } from 'lucide-react';
 import {
   DropdownMenu,
@@ -19,6 +20,7 @@ import { Button } from '../ui/button';
 import { useLogout } from '@/apis/auth';
 import { USER_ROLES } from '@/constants';
 import { useGetMe } from '@/apis/users';
+import { useNavigate } from 'react-router-dom';
 // import LogoIcon from '@/assets/svgs/LogoIcon';
 
 export default function Header() {
@@ -28,6 +30,8 @@ export default function Header() {
   const toggleSidebarMobile = useGlobalStore(
     (state) => state.toggleSidebarMobile
   );
+
+  const navigate = useNavigate();
 
   const getMeQuery = useGetMe();
 
@@ -76,11 +80,20 @@ export default function Header() {
             <span className='sr-only'>Toggle user menu</span>
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align='end' className='w-40'>
-          <DropdownMenuItem className='flex gap-x-4'>
+        <DropdownMenuContent align='end' className=''>
+          <DropdownMenuItem
+            className='flex gap-x-4'
+            onClick={() => navigate('/my-profile')}
+          >
             <UserRoundPlusIcon size={18} />
-            My profile
+            My account
           </DropdownMenuItem>
+          {getMeQuery.data?.role === USER_ROLES.admin && (
+            <DropdownMenuItem className='flex gap-x-4'>
+              <BoltIcon size={18} />
+              My company profile
+            </DropdownMenuItem>
+          )}
           <DropdownMenuSeparator />
           <DropdownMenuItem
             className='flex gap-x-4'

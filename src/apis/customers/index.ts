@@ -78,7 +78,7 @@ const updateUser = async ({
   data: userData,
   id,
 }: {
-  data: { name?: string; email?: string };
+  data: Partial<TUser>;
   id: string | undefined;
 }) => {
   const { data } = await request({
@@ -90,8 +90,14 @@ const updateUser = async ({
 };
 
 export function useUpdateUser() {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: updateUser,
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['get-me'],
+      });
+    }
   });
 }
 

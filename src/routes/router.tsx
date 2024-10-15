@@ -23,6 +23,7 @@ import OrderDetails from '@/components/orders/Details';
 import ImagesPage from '@/components/images';
 import ImageForm from '@/components/images/Form';
 import SuperAdminRoute from './SuperAdminRoute';
+import MyProfilePage from '@/components/my-profile';
 
 export const router = createBrowserRouter([
   {
@@ -51,6 +52,10 @@ export const router = createBrowserRouter([
             element: <ProductForm />,
           },
           { path: 'products/edit/:productId', element: <ProductForm /> },
+          {
+            path: 'my-profile',
+            element: <MyProfilePage />,
+          },
           {
             path: 'categories',
             element: (
