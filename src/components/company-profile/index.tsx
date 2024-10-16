@@ -6,7 +6,7 @@ import LoaderComponent from '../ui/loader';
 // Utils
 import { useGetMe } from '@/apis/users';
 
-export default function MyProfilePage() {
+export default function CompanyProfilePage() {
   const navigate = useNavigate();
   const getMeQuery = useGetMe();
 
@@ -21,7 +21,9 @@ export default function MyProfilePage() {
           <span className='capitalize'>back to dashboard</span>
         </Button>
       </div>
-      <Outlet context={{ ...getMeQuery.data }} />
+      {getMeQuery.data.company && (
+        <Outlet context={{ ...getMeQuery.data.company }} />
+      )}
     </section>
   );
 }

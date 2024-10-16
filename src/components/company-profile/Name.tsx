@@ -16,39 +16,34 @@ import {
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 // Utils
-import { useUpdateUser } from '@/apis/customers';
-import { TUser } from '@/types/user';
+import { useUpdateCompany } from '@/apis/companies';
+import { TCompany } from '@/types/company';
 
-const fullNameSchema = z.object({
-  firstName: z.string().min(1, {
-    message: 'First name is required',
-  }),
-  lastName: z.string().min(1, {
-    message: 'Last name is required',
+const nameSchema = z.object({
+  name: z.string().min(1, {
+    message: 'Name is required',
   }),
 });
 
-export default function FullNameForm() {
+export default function CompanyNameForm() {
   const navigate = useNavigate();
-  const { _id, firstName, lastName } =
-    useOutletContext<Pick<TUser, '_id' | 'firstName' | 'lastName'>>();
-
+  const { _id, name } = useOutletContext<Pick<TCompany, '_id' | 'name'>>();
   const form = useForm({
     defaultValues: {
-      firstName,
-      lastName,
+      name,
     },
-    resolver: zodResolver(fullNameSchema),
+    resolver: zodResolver(nameSchema),
   });
 
-  const updateUserMutation = useUpdateUser();
+  const updateCompanyMutation = useUpdateCompany();
 
-  const onSubmit = (values: z.infer<typeof fullNameSchema>) => {
-    updateUserMutation.mutate(
+  const onSubmit = (values: z.infer<typeof nameSchema>) => {
+    updateCompanyMutation.mutate(
       { id: _id, data: values },
-      { onSuccess: () => navigate('/my-profile') }
+      { onSuccess: () => navigate('/company-profile') }
     );
   };
+
   return (
     <Card className='max-w-[662px]'>
       <CardContent>
@@ -57,27 +52,12 @@ export default function FullNameForm() {
             onSubmit={form.handleSubmit(onSubmit)}
             className='grid grid-cols-2 gap-8'
           >
-            {/* First Name */}
             <FormField
               control={form.control}
-              name='firstName'
+              name='name'
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel>First name</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            {/* Last Name */}
-            <FormField
-              control={form.control}
-              name='lastName'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Last name</FormLabel>
+                <FormItem className='col-span-2'>
+                  <FormLabel>name</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -86,17 +66,18 @@ export default function FullNameForm() {
               )}
             />
             <Button
-              type='button'
               variant='outline'
-              onClick={() => navigate('/my-profile')}
+              onClick={() => navigate('/company-profile')}
             >
               Canel
             </Button>
             <Button
               type='submit'
-              disabled={!form.formState.isDirty || updateUserMutation.isPending}
+              disabled={
+                !form.formState.isDirty || updateCompanyMutation.isPending
+              }
             >
-              {updateUserMutation.isPending ? (
+              {updateCompanyMutation.isPending ? (
                 <>
                   <Loader2Icon className='mr-2 h-4 w-4 animate-spin' />
                   Please wait

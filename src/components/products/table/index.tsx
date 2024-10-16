@@ -12,7 +12,6 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { Loader } from 'lucide-react';
 import { useInView } from 'react-intersection-observer';
 // UI
 import {

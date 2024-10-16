@@ -13,36 +13,34 @@ import {
   FormLabel,
   FormMessage,
 } from '../ui/form';
-import { Input } from '../ui/input';
 import { Button } from '../ui/button';
+import TiptapEditor from '@/lib/tiptap';
 // Utils
-import { useUpdateUser } from '@/apis/customers';
-import { TUser } from '@/types/user';
+import { useUpdateCompany } from '@/apis/companies';
+import { TCompany } from '@/types/company';
 
-const mobileNumberSchema = z.object({
-  mobileNumber: z.string().optional(),
+const descriptionSchema = z.object({
+  description: z.string().min(1, 'Company description is required'),
 });
 
-export default function MobileNumberForm() {
+export default function CompanyDescriptionForm() {
   const navigate = useNavigate();
-  const { _id, mobileNumber } =
-    useOutletContext<Pick<TUser, '_id' |'mobileNumber'>>();
+  const { _id, description } =
+    useOutletContext<Pick<TCompany, '_id' | 'description'>>();
   const form = useForm({
     defaultValues: {
-      mobileNumber,
+      description,
     },
-    resolver: zodResolver(mobileNumberSchema),
+    resolver: zodResolver(descriptionSchema),
   });
 
-  const updateUserMutation = useUpdateUser();
+  const updateCompanyMutation = useUpdateCompany();
 
-  const onSubmit = (values: z.infer<typeof mobileNumberSchema>) => {
-    if (values.mobileNumber) {
-      updateUserMutation.mutate(
-        { id: _id, data: values },
-        { onSuccess: () => navigate('/my-profile') }
-      );
-    }
+  const onSubmit = (values: z.infer<typeof descriptionSchema>) => {
+    updateCompanyMutation.mutate(
+      { id: _id, data: values },
+      { onSuccess: () => navigate('/company-profile') }
+    );
   };
 
   return (
@@ -53,32 +51,32 @@ export default function MobileNumberForm() {
             onSubmit={form.handleSubmit(onSubmit)}
             className='grid grid-cols-2 gap-8'
           >
-            {/* Email */}
             <FormField
               control={form.control}
-              name='mobileNumber'
+              name='description'
               render={({ field }) => (
-                <FormItem className='col-span-2'>
-                  <FormLabel>mobile number</FormLabel>
+                <FormItem className='lg:col-span-2'>
+                  <FormLabel>description</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <TiptapEditor {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
             <Button
-              type='button'
               variant='outline'
-              onClick={() => navigate('/my-profile')}
+              onClick={() => navigate('/company-profile')}
             >
               Canel
             </Button>
             <Button
               type='submit'
-              disabled={!form.formState.isDirty || updateUserMutation.isPending}
+              disabled={
+                !form.formState.isDirty || updateCompanyMutation.isPending
+              }
             >
-              {updateUserMutation.isPending ? (
+              {updateCompanyMutation.isPending ? (
                 <>
                   <Loader2Icon className='mr-2 h-4 w-4 animate-spin' />
                   Please wait

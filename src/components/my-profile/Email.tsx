@@ -1,6 +1,9 @@
+import { useNavigate, useOutletContext } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-
+import { Loader2Icon } from 'lucide-react';
+// UI
 import { Card, CardContent } from '../ui/card';
 import {
   Form,
@@ -10,18 +13,11 @@ import {
   FormLabel,
   FormMessage,
 } from '../ui/form';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
-import { TScreen } from '.';
+// Utils
 import { useUpdateUser } from '@/apis/customers';
-import { Loader2Icon } from 'lucide-react';
-
-type TEmailScreenFormProps = {
-  _id: string;
-  email: string;
-  setScreen: React.Dispatch<React.SetStateAction<TScreen>>;
-};
+import { TUser } from '@/types/user';
 
 const emailSchema = z.object({
   email: z
@@ -32,11 +28,9 @@ const emailSchema = z.object({
     .email({ message: 'Please enter a valid email address.' }),
 });
 
-export default function EmailForm({
-  _id,
-  email,
-  setScreen,
-}: TEmailScreenFormProps) {
+export default function EmailForm() {
+  const navigate = useNavigate();
+  const { _id, email } = useOutletContext<Pick<TUser, '_id' | 'email'>>();
   const form = useForm({
     defaultValues: {
       email,
@@ -49,7 +43,7 @@ export default function EmailForm({
   const onSubmit = (values: z.infer<typeof emailSchema>) => {
     updateUserMutation.mutate(
       { id: _id, data: values },
-      { onSuccess: () => setScreen('details') }
+      { onSuccess: () => navigate('/my-profile') }
     );
   };
   return (
@@ -74,7 +68,11 @@ export default function EmailForm({
                 </FormItem>
               )}
             />
-            <Button variant='outline' onClick={() => setScreen('details')}>
+            <Button
+              type='button'
+              variant='outline'
+              onClick={() => navigate('/my-profile')}
+            >
               Canel
             </Button>
             <Button

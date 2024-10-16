@@ -89,7 +89,10 @@ export default function Header() {
             My account
           </DropdownMenuItem>
           {getMeQuery.data?.role === USER_ROLES.admin && (
-            <DropdownMenuItem className='flex gap-x-4'>
+            <DropdownMenuItem
+              className='flex gap-x-4'
+              onClick={() => navigate('/company-profile')}
+            >
               <BoltIcon size={18} />
               My company profile
             </DropdownMenuItem>

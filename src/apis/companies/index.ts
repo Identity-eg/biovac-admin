@@ -70,8 +70,8 @@ const updateCompany = async ({
   data: companyData,
   id,
 }: {
-  data: Record<string, any>;
-  id: string | undefined;
+  data: Partial<TCompany>;
+  id: string;
 }) => {
   const { data } = await request({
     url: `companies/${id}`,
@@ -82,8 +82,12 @@ const updateCompany = async ({
 };
 
 export function useUpdateCompany() {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: updateCompany,
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['get-me'] });
+    },
   });
 }
 

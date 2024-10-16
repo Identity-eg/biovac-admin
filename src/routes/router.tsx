@@ -22,8 +22,17 @@ import DosageFormForm from '@/components/dosageForm/Form';
 import OrderDetails from '@/components/orders/Details';
 import ImagesPage from '@/components/images';
 import ImageForm from '@/components/images/Form';
-import SuperAdminRoute from './SuperAdminRoute';
 import MyProfilePage from '@/components/my-profile';
+import CompanyProfilePage from '@/components/company-profile';
+import FullNameForm from '@/components/my-profile/FullName';
+import ProfileDetailsScreen from '@/components/my-profile/Detais';
+import CompanyDetailsScreen from '@/components/company-profile/Detais';
+import EmailForm from '@/components/my-profile/Email';
+import MobileNumberForm from '@/components/my-profile/MobileNumber';
+import PasswordForm from '@/components/my-profile/Password';
+import CompanyNameForm from '@/components/company-profile/Name';
+import CompanyDescriptionForm from '@/components/company-profile/Description';
+import SuperAdminRoute from './SuperAdminRoute';
 
 export const router = createBrowserRouter([
   {
@@ -55,6 +64,43 @@ export const router = createBrowserRouter([
           {
             path: 'my-profile',
             element: <MyProfilePage />,
+            children: [
+              {
+                index: true,
+                element: <ProfileDetailsScreen />,
+              },
+              {
+                path: 'edit-fullname',
+                element: <FullNameForm />,
+              },
+              {
+                path: 'edit-email',
+                element: <EmailForm />,
+              },
+              {
+                path: 'edit-mobilenumber',
+                element: <MobileNumberForm />,
+              },
+              {
+                path: 'edit-password',
+                element: <PasswordForm />,
+              },
+            ],
+          },
+          {
+            path: 'company-profile',
+            element: <CompanyProfilePage />,
+            children: [
+              { index: true, element: <CompanyDetailsScreen /> },
+              {
+                path: 'edit-name',
+                element: <CompanyNameForm />,
+              },
+              {
+                path: 'edit-description',
+                element: <CompanyDescriptionForm />,
+              },
+            ],
           },
           {
             path: 'categories',

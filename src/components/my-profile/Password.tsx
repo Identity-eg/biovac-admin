@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -16,12 +17,7 @@ import {
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 // Utils
-import { TScreen } from '.';
 import { useUpdateUserPassword } from '@/apis/users';
-
-type TPasswordScreenFormProps = {
-  setScreen: React.Dispatch<React.SetStateAction<TScreen>>;
-};
 
 const passwordSchema = z
   .object({
@@ -37,13 +33,18 @@ const passwordSchema = z
   })
   .refine(
     ({ newPassword, confirmNewPassword }) => newPassword === confirmNewPassword,
-    { message: "Please make sure 2 passwords are matched", path: ['confirmNewPassword'] }
+    {
+      message: 'Please make sure 2 passwords are matched',
+      path: ['confirmNewPassword'],
+    }
   );
 
-export default function PasswordForm({ setScreen }: TPasswordScreenFormProps) {
+export default function PasswordForm() {
   const [showOldPassword, setShowOldPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const navigate = useNavigate();
 
   const form = useForm({
     defaultValues: {
@@ -64,7 +65,7 @@ export default function PasswordForm({ setScreen }: TPasswordScreenFormProps) {
           newPassword: values.newPassword,
         },
       },
-      { onSuccess: () => setScreen('details') }
+      { onSuccess: () => navigate('/my-profile') }
     );
   };
 
@@ -172,7 +173,11 @@ export default function PasswordForm({ setScreen }: TPasswordScreenFormProps) {
                 </FormItem>
               )}
             />
-            <Button variant='outline' onClick={() => setScreen('details')}>
+            <Button
+              type='button'
+              variant='outline'
+              onClick={() => navigate('/my-profile')}
+            >
               Canel
             </Button>
             <Button
