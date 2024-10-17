@@ -62,11 +62,11 @@ export function DataTableToolbar<TData>({
             options={[
               {
                 label: 'blocked',
-                value: 'blocked',
+                value: 'true',
               },
               {
                 label: 'un-blocked',
-                value: 'un-blocked',
+                value: 'false',
               },
             ]}
           />
