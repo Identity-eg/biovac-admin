@@ -15,7 +15,7 @@ export const ORDER_STATUS = {
     color: '',
   },
   cancelled: {
-    label: 'Cancelled', 
+    label: 'Cancelled',
     value: 'cancelled',
     color: '',
   },
@@ -26,9 +26,9 @@ export const IMAGES_PATHS = {
 } as const;
 
 export const USER_ROLES = {
-  user: 'USER',
-  admin: 'ADMIN',
-  superAdmin: 'SUPER_ADMIN',
+  user: { label: 'User', value: 'USER' },
+  admin: { label: 'Admin', value: 'ADMIN' },
+  superAdmin: { label: 'Super Admin', value: 'SUPER_ADMIN' },
 } as const;
 
 // ###########################################

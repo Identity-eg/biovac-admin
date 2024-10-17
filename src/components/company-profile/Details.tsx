@@ -15,7 +15,7 @@ import CompanyUploads from './CompanyUploads';
 // Utils
 import { TCompany } from '@/types/company';
 
-export default function CompanyDetaisScreen() {
+export default function CompanyDetails() {
   const navigate = useNavigate();
   const { name, description, logo, cover } =
     useOutletContext<
@@ -25,7 +25,7 @@ export default function CompanyDetaisScreen() {
   return (
     <Card className='p-4 space-y-6'>
       <article className='flex items-start gap-x-4'>
-        <FolderPenIcon size={26} color='gray' />
+        <FolderPenIcon size={26} color='gray' className='shrink-0' />
         <div className='space-y-2'>
           <h5 className='text-base font-bold'>Company name</h5>
           <p className='text-sm'>{name}</p>
@@ -41,7 +41,7 @@ export default function CompanyDetaisScreen() {
       </article>
       <Separator />
       <article className='flex items-start gap-x-4'>
-        <FileTextIcon size={26} color='gray' />
+        <FileTextIcon size={26} color='gray' className='shrink-0' />
         <div className='space-y-2'>
           <h5 className='text-base font-bold'>Description</h5>
           <p className='text-sm'>{parse(description ?? '')}</p>
@@ -57,7 +57,7 @@ export default function CompanyDetaisScreen() {
       </article>
       <Separator />
       <article className='flex items-start gap-x-4'>
-        <HexagonIcon size={26} color='gray' />
+        <HexagonIcon size={26} color='gray' className='shrink-0' />
         <div className='space-y-2'>
           <h5 className='text-base font-bold'>logo</h5>
           {logo ? <img src={logo} className='object- h-32' /> : '_ _ _'}

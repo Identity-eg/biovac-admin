@@ -26,7 +26,7 @@ import MyProfilePage from '@/components/my-profile';
 import CompanyProfilePage from '@/components/company-profile';
 import FullNameForm from '@/components/my-profile/FullName';
 import ProfileDetailsScreen from '@/components/my-profile/Detais';
-import CompanyDetailsScreen from '@/components/company-profile/Detais';
+import CompanyDetailsScreen from '@/components/company-profile/Details';
 import EmailForm from '@/components/my-profile/Email';
 import MobileNumberForm from '@/components/my-profile/MobileNumber';
 import PasswordForm from '@/components/my-profile/Password';

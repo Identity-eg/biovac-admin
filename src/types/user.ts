@@ -8,7 +8,7 @@ export type TUser = {
   fullName: string;
   email: string;
   mobileNumber?: string;
-  role: typeof USER_ROLES.admin | typeof USER_ROLES.superAdmin;
+  role: typeof USER_ROLES.admin.value | typeof USER_ROLES.superAdmin.value;
   company?: TCompany;
   blocked: boolean;
   ordersCount: number;

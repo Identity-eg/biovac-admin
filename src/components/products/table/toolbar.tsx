@@ -23,7 +23,7 @@ export function DataTableToolbar<TData>({
   table,
 }: DataTableToolbarProps<TData>) {
   const getMeQuery = useGetMe();
-  const superAdmin = getMeQuery.data?.role === USER_ROLES.superAdmin;
+  const superAdmin = getMeQuery.data?.role === USER_ROLES.superAdmin.value;
 
   const [searchParams, setSearchParams] = useSearchParams();
   const [debouncedSearch, searchValue, setSearchValue] = useDebounce<string>(

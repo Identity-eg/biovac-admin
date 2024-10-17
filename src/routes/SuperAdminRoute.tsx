@@ -5,7 +5,7 @@ import { useGetMe } from '@/apis/users';
 
 export default function SuperAdminRoute({ children }: { children: ReactNode }) {
   const getMeQuery = useGetMe();
-  return getMeQuery.data?.role === USER_ROLES.superAdmin ? (
+  return getMeQuery.data?.role === USER_ROLES.superAdmin.value ? (
     children
   ) : (
     <Navigate to='/' />

@@ -68,7 +68,7 @@ export default function Header() {
       <div className='flex gap-x-4'>
         <LayoutDashboard fontSize={30} />
         <span className='capitalize'>
-          {getMeQuery.data?.role === USER_ROLES.admin
+          {getMeQuery.data?.role === USER_ROLES.admin.value
             ? getMeQuery.data.company?.name
             : 'super admin'}
         </span>
@@ -88,7 +88,7 @@ export default function Header() {
             <UserRoundPlusIcon size={18} />
             My account
           </DropdownMenuItem>
-          {getMeQuery.data?.role === USER_ROLES.admin && (
+          {getMeQuery.data?.role === USER_ROLES.admin.value && (
             <DropdownMenuItem
               className='flex gap-x-4'
               onClick={() => navigate('/company-profile')}

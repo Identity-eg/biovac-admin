@@ -209,7 +209,7 @@ export default function ProductForm() {
           {viewProductQuery.isLoading && <WhiteOverlay />}
           <Card className='p-6 grid lg:grid-cols-2 gap-x-4 gap-y-6'>
             {/* Company */}
-            {getMeQuery.data?.role === USER_ROLES.superAdmin && (
+            {getMeQuery.data?.role === USER_ROLES.superAdmin.value && (
               <FormField
                 control={form.control}
                 name='company'
@@ -346,9 +346,7 @@ export default function ProductForm() {
                   <TableHeader className='capitalize text-xs'>
                     <TableRow>
                       <TableHead>Name</TableHead>
-                      <TableHead>
-                        Amount Per Serving
-                      </TableHead>
+                      <TableHead>Amount Per Serving</TableHead>
                       <TableHead>Daily Value</TableHead>
                       <TableHead className='text-right'>Action</TableHead>
                     </TableRow>

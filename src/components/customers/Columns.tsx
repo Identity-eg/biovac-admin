@@ -7,6 +7,7 @@ import { DataTableColumnHeader } from './table/columnHeader';
 import { DataTableRowActions } from './table/rowActions';
 // Utils
 import { TUser } from '@/types/user';
+import { USER_ROLES } from '@/constants';
 
 export const columns: ColumnDef<TUser>[] = [
   {
@@ -39,6 +40,23 @@ export const columns: ColumnDef<TUser>[] = [
     },
     enableSorting: false,
   },
+  {
+    accessorKey: 'role',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title='role' />
+    ),
+    cell: ({ row }) => {
+      const role = Object.values(USER_ROLES).find(
+        (r) => r.value === row.original.role
+      );
+      return (
+        <span className='px-2 font-semibold leading-5 text-green-800 bg-purple-100 rounded-full'>
+          {role?.label}
+        </span>
+      );
+    },
+  },
+
   {
     accessorKey: 'ordersCount',
     header: ({ column }) => (

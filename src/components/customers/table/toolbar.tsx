@@ -6,9 +6,10 @@ import { X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { DataTableViewOptions } from './viewOption';
-import { DataTableFacetedFilter } from './facetedFilter';
+import SingleDataTableFacetedFilter from './singleDataTableFacetedFilter';
 // Utils
 import useDebounce from '@/hooks/useDebounceValue';
+import { USER_ROLES } from '@/constants';
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
@@ -47,9 +48,16 @@ export function DataTableToolbar<TData>({
           onChange={(event) => setSearchValue(event.target.value)}
           className='h-8 w-[150px] lg:w-[250px]'
         />
+        {table.getColumn('role') && (
+          <SingleDataTableFacetedFilter
+            param='role'
+            title='role'
+            options={Object.values(USER_ROLES)}
+          />
+        )}
         {table.getColumn('blocked') && (
-          <DataTableFacetedFilter
-            column={table.getColumn('blocked')}
+          <SingleDataTableFacetedFilter
+            param='blocked'
             title='blocked'
             options={[
               {
